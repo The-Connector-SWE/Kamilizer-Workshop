@@ -38,7 +38,7 @@ function BootScreen({ onStart }) {
 
   return (
     <div className={"boot" + (out ? " out" : "")} onClick={start} role="button" aria-label="Press start">
-      <span className="boot-presents">PodMedia Network presents</span>
+      <span className="boot-presents">pod ai studio presents</span>
       <h1 className="boot-title">The Director's<span className="row2 iri">Game</span></h1>
       <div className="boot-rule"></div>
       <div className="press-start">Press Start</div>
@@ -56,7 +56,7 @@ function HUDBar({ levels, cleared, currentId, xp, xpMax, rank, onHome, muted, on
   return (
     <header className="hud">
       <button className="hud-brand" onClick={onHome}>
-        <img src="https://podmedia.network/img/shared/logo.png" style={{ height: "20px", width: "auto", display: "block" }} alt="PodMedia Network" />
+        <span style={{ fontFamily:"'Space Grotesk',sans-serif", fontSize:"13px", fontWeight:700, color:"#fff", letterSpacing:".01em", whiteSpace:"nowrap" }}>pod <span style={{ color:"#e30016" }}>ai</span> studio</span>
       </button>
       <nav className="hud-links">
         <a className="hud-link" href="instructors.html">Instructors</a>

@@ -54,7 +54,7 @@
   var nav =
     '<header class="hud">' +
     '<a class="hud-brand" href="index.html">' +
-    '<img src="https://podmedia.network/img/shared/logo.png" style="height:20px;width:auto;display:block;" alt="PodMedia Network"></a>' +
+    '<span style="font-family:\'Space Grotesk\',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:.01em;white-space:nowrap">pod <span style="color:#e30016">ai</span> studio</span></a>' +
     '<nav class="hud-links">' + linksHtml + "</nav>" +
     '<div class="hud-right">' +
     '<div class="hud-xp"><div class="hud-xp-row"><span>XP</span><b>' + xp + " / " + TOTAL_XP + "</b></div>" +
