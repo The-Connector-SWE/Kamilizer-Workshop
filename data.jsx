@@ -122,7 +122,7 @@ const PLATFORMS = {
     ],
   },
   magnifica: {
-    id: "magnifica", name: "Magnifica", vendor: "Enhancement", hue: "#6ec8ff", url: "https://magnifica.ai",
+    id: "magnifica", name: "Magnific", vendor: "Enhancement", hue: "#6ec8ff", url: "https://www.magnific.com",
     tagline: "Upscale & enhance",
     about: "Brings generated frames up to delivery resolution — upscaling and detail enhancement so your AI footage and stills hold up on the big screen.",
     usage: [
