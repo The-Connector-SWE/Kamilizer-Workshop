@@ -8,10 +8,8 @@
 
   var LINKS = [
     { id: "instructors", label: "Instructors", href: "instructors.html" },
-    { id: "agenda", label: "Agenda", href: "agenda.html" },
     { id: "realorai", label: "AI Fun", href: "real-or-ai.html" },
     { id: "levels", label: "Missions", href: "index.html" },
-    { id: "resources", label: "Resources", href: "resources.html" },
   ];
 
   function save() {
