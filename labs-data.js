@@ -1,25 +1,6 @@
 // labs-data.js — playbook content for the two hands-on sessions.
 window.LABS = [
   {
-    id: "lab1",
-    tag: "Day 1 · 01:00–02:00",
-    title: "Hands-On Lab 1",
-    subtitle: "Produce your first AI video clip from a guided story — then peer review and facilitator feedback.",
-    goal: "By the end you'll have one animated clip built end-to-end: a Gem-driven storyboard, generated images, and an image-to-video render in Firefly.",
-    duration: "60 min",
-    steps: [
-      { t: "Open the playbook", d: "Grab the participant playbook and skim the full flow before you start." },
-      { t: "Create your Gem", d: "Copy & paste the provided instructions to spin up your executive-producer Gem." },
-      { t: "Upload your images", d: "Bring in your reference images so the Gem has visual context." },
-      { t: "Ask for the animation prompt", d: "Have the Gem write the prompt that will animate your images." },
-      { t: "Log in to Firefly", d: "Sign in and open your workspace." },
-      { t: "Create a demo board", d: "Start a fresh board for this lab." },
-      { t: "Upload images to the board", d: "Drop your generated stills onto the board." },
-      { t: "Generate videos", d: "Run the image-to-video generation and review your first clip." },
-    ],
-    footer: { label: "Need the tools?", link: "index.html", linkText: "Review the platform stack" },
-  },
-  {
     id: "sprint",
     tag: "Day 2 · 10:30–12:30",
     title: "Final Project Sprint",

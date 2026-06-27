@@ -32,10 +32,8 @@ function GameTopBar({ levels, cleared, xp, xpMax, rank, onHome }) {
       </button>
       <nav className="nav-links">
         <button className="nav-link active" onClick={onHome}>Levels</button>
-        <a className="nav-link" href="agenda.html">Agenda</a>
         <a className="nav-link" href="instructors.html">Instructors</a>
         <a className="nav-link" href="real-or-ai.html">Real or AI</a>
-        <a className="nav-link" href="resources.html">Resources</a>
       </nav>
       <div className="gbar-right">
         <div className="gbar-prog">
@@ -53,8 +51,7 @@ function GameTopBar({ levels, cleared, xp, xpMax, rank, onHome }) {
 function MapView({ levels, platforms, labs, labChecks, best, rank, onEnter, onEnterLab, onReset }) {
   const clearedCount = levels.filter((l) => best[l.id]).length;
   const allDone = clearedCount === levels.length;
-  // weave labs into the path per the agenda: lab1 after Level 4 (Day 1), sprint after Level 5 (Day 2)
-  const labAfter = { 4: labs.find((l) => l.id === "lab1"), 5: labs.find((l) => l.id === "sprint") };
+  const labAfter = { 5: labs.find((l) => l.id === "sprint") };
   const labDone = (lab) => {
     const c = labChecks[lab.id] || [];
     return lab.steps.length > 0 && lab.steps.every((_, i) => c[i]);

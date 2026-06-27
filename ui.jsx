@@ -31,10 +31,7 @@ function TopBar({ modules, completed, scoreEarned, scorePossible, onHome, view, 
 
       <nav className="pagelinks">
         <button className="plink active" onClick={onHome}>Platforms</button>
-        <a className="plink" href="agenda.html">Agenda</a>
-        <a className="plink" href="labs.html">Labs</a>
         <a className="plink" href="real-or-ai.html">Real or AI</a>
-        <a className="plink" href="resources.html">Resources</a>
       </nav>
 
       <nav className="topnav" aria-hidden="true" style={{ display: "none" }}>

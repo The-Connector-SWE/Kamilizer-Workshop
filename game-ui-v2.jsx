@@ -60,9 +60,7 @@ function HUDBar({ levels, cleared, currentId, xp, xpMax, rank, onHome, muted, on
       </button>
       <nav className="hud-links">
         <a className="hud-link" href="instructors.html">Instructors</a>
-        <a className="hud-link" href="agenda.html">Agenda</a>
         <a className="hud-link" href="real-or-ai.html">AI Fun</a>
-        <a className="hud-link" href="resources.html">Resources</a>
       </nav>
       <div className="hud-right">
         <div className="hud-missions" aria-label="Mission progress">
