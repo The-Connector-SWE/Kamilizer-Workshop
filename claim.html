@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Certificate · AI Video Production Workflow 101</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+
+/* ─── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --bg: #08080c; --bg2: #0d0c14;
+  --ink: #f6f4fb; --muted: #a39db8; --muted2: #cfc9e0;
+  --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.16);
+  --red: #ff2e3f; --glow: rgba(255,46,63,.55);
+  --grad: linear-gradient(100deg, #ff2e3f, #ff5a4d 55%, #ff8a3d);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Sora', sans-serif; -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ─── BACKGROUND FX ──────────────────────────────────────── */
+.bg-fx {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  background: radial-gradient(120% 80% at 50% -10%, #1a0a12, transparent 55%),
+    radial-gradient(80% 60% at 85% 10%, rgba(255,46,63,.1), transparent 60%), var(--bg);
+}
+.bg-fx .grid {
+  position: absolute; inset: 0; opacity: .35;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.page {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.site-header {
+  width: 100%; display: flex; justify-content: center;
+  padding: 28px 20px 0;
+}
+.logo-row {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,.07); border: 1px solid var(--line2);
+  padding: 10px 20px; border-radius: 999px;
+  backdrop-filter: blur(12px);
+}
+.logo-row img       { height: 28px; width: auto; display: block; }
+.logo-row .logo-partner { height: 44px; }
+.logo-row .logo-sep { width: 1px; height: 24px; background: rgba(255,255,255,.2); flex: none; }
+
+/* ─── HERO ───────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: clamp(36px, 7vw, 72px) 20px clamp(28px, 5vw, 48px);
+  max-width: 560px;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted2); background: rgba(255,46,63,.1);
+  border: 1px solid rgba(255,46,63,.28); padding: 7px 14px;
+  border-radius: 999px; margin-bottom: 22px;
+}
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex: none; }
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(30px, 6vw, 52px); font-weight: 700;
+  letter-spacing: -.02em; line-height: 1.1; margin-bottom: 14px;
+}
+.hero h1 .accent { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { font-size: clamp(14px, 2vw, 16px); color: var(--muted); line-height: 1.65; }
+
+/* ─── SEARCH ─────────────────────────────────────────────── */
+.search-wrap { width: 100%; max-width: 520px; padding: 0 20px 12px; }
+
+.search-box { display: flex; gap: 10px; margin-bottom: 14px; }
+
+.search-box input {
+  flex: 1; font-family: inherit; font-size: 16px; color: var(--ink);
+  background: rgba(255,255,255,.07); border: 1.5px solid var(--line2);
+  border-radius: 14px; padding: 15px 18px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-box input:focus {
+  outline: none; border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(255,46,63,.15);
+}
+.search-box input::placeholder { color: rgba(163,157,184,.45); }
+
+.search-box button {
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  background: var(--grad); color: #fff; border: none;
+  border-radius: 14px; padding: 15px 22px; cursor: pointer;
+  box-shadow: 0 8px 24px var(--glow); transition: transform .2s, box-shadow .2s;
+  white-space: nowrap;
+}
+.search-box button:hover { transform: translateY(-2px); box-shadow: 0 14px 34px var(--glow); }
+.search-box button:active { transform: none; }
+
+/* ─── SUGGESTIONS ────────────────────────────────────────── */
+.suggestions { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+.sug-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px; background: rgba(255,255,255,.05);
+  border: 1px solid var(--line); border-radius: 13px;
+  cursor: pointer; transition: background .15s, border-color .15s; font-size: 15px;
+  color: var(--muted2);
+}
+.sug-item:hover { background: rgba(255,46,63,.09); border-color: rgba(255,46,63,.35); color: var(--ink); }
+.sug-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex: none;
+  background: rgba(255,46,63,.12); display: grid; place-items: center; color: var(--red);
+}
+
+/* ─── MESSAGES ───────────────────────────────────────────── */
+.msg { padding: 14px 18px; border-radius: 13px; font-size: 14px; line-height: 1.5; }
+.msg-err { background: rgba(255,46,63,.08); border: 1px solid rgba(255,46,63,.3); color: #ff8a9a; }
+.msg-ok  { background: rgba(46,255,140,.06); border: 1px solid rgba(46,255,140,.25); color: #7affb0; }
+
+/* ─── INVALID STATE ──────────────────────────────────────── */
+.invalid-state {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; padding: 48px 24px; gap: 14px;
+}
+.invalid-state h2 { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; }
+.invalid-state p   { color: var(--muted); font-size: 15px; max-width: 40ch; line-height: 1.65; }
+
+/* ─── RESULT SECTION ─────────────────────────────────────── */
+.cert-result {
+  width: 100%;
+  padding: 20px 0 52px;
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+}
+.found-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(46,255,140,.07); border: 1px solid rgba(46,255,140,.25);
+  padding: 11px 18px; border-radius: 999px; font-size: 14px; color: #7affb0; font-weight: 600;
+}
+.btn-dl {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--grad); color: #fff; font-family: inherit;
+  font-size: 15px; font-weight: 700; border: none; border-radius: 999px;
+  padding: 14px 30px; cursor: pointer; box-shadow: 0 10px 30px var(--glow);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-dl:hover { transform: translateY(-2px); box-shadow: 0 16px 42px var(--glow); }
+
+/* ─── CERT SCALING WRAPPER ───────────────────────────────── */
+.cert-scale-outer {
+  width: 100%; overflow: hidden;
+  display: flex; justify-content: center; align-items: flex-start;
+}
+.cert-scale-inner { transform-origin: top center; }
+
+/* ─── CERTIFICATE (identical to generator) ───────────────── */
+.cert-page {
+  width: 297mm; height: 210mm; position: relative;
+  background: #060608; overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.8);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;
+}
+.cert-page::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 9px;
+  background: linear-gradient(90deg, #ff2e3f 0%, #ff5a4d 55%, #ff8a3d 100%); z-index: 2;
+}
+.cert-frame {
+  position: absolute; inset: 14mm;
+  border: 1px solid rgba(255,255,255,.12); pointer-events: none; z-index: 1;
+}
+.cert-frame::before {
+  content: ''; position: absolute; top: -1px; left: -1px;
+  width: 22px; height: 22px; border-top: 2.5px solid #ff2e3f; border-left: 2.5px solid #ff2e3f;
+}
+.cert-frame::after {
+  content: ''; position: absolute; bottom: -1px; right: -1px;
+  width: 22px; height: 22px; border-bottom: 2.5px solid #ff2e3f; border-right: 2.5px solid #ff2e3f;
+}
+.cert-inner {
+  position: absolute; inset: 9px 0 0 0;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 0 26mm 10mm; text-align: center;
+}
+.cert-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4mm; }
+.cert-logo img       { height: 40px; width: auto; display: block; }
+.cert-logo .logo-sep { width: 1px; height: 32px; background: rgba(255,255,255,.22); flex: none; }
+.cert-logo .logo-partner { height: 65px; width: auto; display: block; opacity: .9; }
+.cert-org { font-family: 'Space Grotesk', sans-serif; font-size: 8pt; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-bottom: 4.5mm; }
+.cert-heading { font-family: 'Space Grotesk', sans-serif; font-size: 10.5pt; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: #ff2e3f; margin-bottom: 4mm; }
+.cert-preamble { font-family: 'Playfair Display', serif; font-style: italic; font-size: 11.5pt; color: rgba(255,255,255,.5); margin-bottom: 3.5mm; }
+.cert-name { font-family: 'Playfair Display', serif; font-size: 28pt; font-weight: 700; color: #f8f4ee; line-height: 1.1; margin-bottom: 4mm; max-width: 230mm; word-break: break-word; }
+.cert-completed { font-family: 'Playfair Display', serif; font-style: italic; font-size: 11pt; color: rgba(255,255,255,.5); margin-bottom: 2mm; }
+.cert-course { font-family: 'Space Grotesk', sans-serif; font-size: 13.5pt; font-weight: 700; color: #f8f4ee; margin-bottom: 2mm; }
+.cert-subtitle { font-family: 'Sora', sans-serif; font-size: 8.5pt; color: rgba(255,255,255,.35); margin-bottom: 5mm; }
+.cert-rule { display: flex; align-items: center; gap: 10px; width: 140mm; margin: 0 auto 4mm; }
+.cert-rule::before, .cert-rule::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.15); }
+.cert-rule span { width: 8px; height: 8px; background: #ff2e3f; transform: rotate(45deg); flex: none; }
+.cert-date { font-family: 'Space Grotesk', sans-serif; font-size: 8.5pt; color: rgba(255,255,255,.38); letter-spacing: .08em; margin-bottom: 5mm; }
+.cert-sigs { display: flex; justify-content: center; gap: 20mm; }
+.cert-sig { text-align: center; }
+.cert-sig-written { font-family: 'Dancing Script', cursive; font-size: 17pt; font-weight: 600; color: #f0e8d8; line-height: 1; margin-bottom: 1mm; white-space: nowrap; }
+.cert-sig-line { width: 48mm; height: 1px; background: rgba(255,255,255,.2); margin: 0 auto 2.5mm; }
+.cert-sig-name { font-family: 'Space Grotesk', sans-serif; font-size: 8.5pt; font-weight: 700; color: #e8e0d8; margin-bottom: 1mm; }
+.cert-sig-role { font-family: 'Sora', sans-serif; font-size: 7.5pt; color: rgba(255,255,255,.38); }
+
+/* ─── PRINT ──────────────────────────────────────────────── */
+@page { size: A4 landscape; margin: 0; }
+
+@media print {
+  .no-print { display: none !important; }
+  .bg-fx { display: none; }
+  html { background: #060608 !important; }
+  body, #page {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #060608 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .cert-scale-outer { overflow: visible; display: block; margin: 0 !important; padding: 0 !important; }
+  .cert-scale-inner { transform: none !important; display: block; margin: 0 !important; }
+  .cert-page { margin: 0 !important; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<div class="bg-fx"><div class="grid"></div></div>
+<div class="page" id="page"></div>
+
+<script>
+/* ─── Utils ──────────────────────────────────────────────── */
+let currentCertName = '';
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function decodeData(str) {
+  try {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch { return null; }
+}
+
+function norm(s) { return s.trim().toLowerCase().replace(/\s+/g, ' '); }
+
+function findMatches(query, names) {
+  const q = norm(query);
+  if (!q) return [];
+  const exact    = names.filter(n => norm(n) === q);
+  if (exact.length) return exact;
+  const starts   = names.filter(n => norm(n).startsWith(q));
+  if (starts.length) return starts.slice(0, 5);
+  const contains = names.filter(n => norm(n).includes(q) || q.includes(norm(n)));
+  return contains.slice(0, 5);
+}
+
+/* ─── Certificate template ───────────────────────────────── */
+function certHTML(name, date) {
+  return `
+<div class="cert-page">
+  <div class="cert-frame"></div>
+  <div class="cert-inner">
+    <div class="cert-logo">
+      <img src="https://podmedia.network/img/shared/logo.png" alt="podmedia network" />
+      <span class="logo-sep"></span>
+      <img class="logo-partner" src="KAMELIZER FLOW LOGO (white 2.png" alt="Kamelizer Flow" />
+    </div>
+    <div class="cert-org">POD AIStudio Talks</div>
+    <div class="cert-heading">Certificate of Completion</div>
+    <div class="cert-preamble">This is to certify that</div>
+    <div class="cert-name">${esc(name)}</div>
+    <div class="cert-completed">has successfully completed</div>
+    <div class="cert-course">AI Video Production Workflow 101</div>
+    <div class="cert-subtitle">A 3-day hands-on intensive in generative AI content production</div>
+    <div class="cert-rule"><span></span></div>
+    ${date ? `<div class="cert-date">${esc(date)}</div>` : ''}
+    <div class="cert-sigs">
+      <div class="cert-sig">
+        <div class="cert-sig-written">Rana Mahmoud</div>
+        <div class="cert-sig-line"></div>
+        <div class="cert-sig-name">Rana Mahmoud</div>
+        <div class="cert-sig-role">Art Director &amp; Visual AI Artist</div>
+      </div>
+      <div class="cert-sig">
+        <div class="cert-sig-written">Abdullah Ghanem</div>
+        <div class="cert-sig-line"></div>
+        <div class="cert-sig-name">Abdullah Ghanem</div>
+        <div class="cert-sig-role">Podcast Producer &amp; Systems Builder</div>
+      </div>
+    </div>
+  </div>
+</div>`.trim();
+}
+
+/* ─── Cert scaling ───────────────────────────────────────── */
+function scaleCert() {
+  const outer = document.querySelector('.cert-scale-outer');
+  const inner = document.querySelector('.cert-scale-inner');
+  if (!outer || !inner) return;
+  const certPxW = 297 * 3.7796;
+  const certPxH = 210 * 3.7796;
+  const available = outer.clientWidth - 16;
+  const scale = Math.min(1, available / certPxW);
+  inner.style.transform = `scale(${scale})`;
+  outer.style.height = Math.ceil(certPxH * scale) + 'px';
+}
+
+/* ─── Render: invalid ────────────────────────────────────── */
+function renderInvalid() {
+  document.getElementById('page').innerHTML = `
+    <header class="site-header no-print">
+      <div class="logo-row">
+        <img src="https://podmedia.network/img/shared/logo.png" alt="podmedia" />
+      </div>
+    </header>
+    <div class="invalid-state">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#ff2e3f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="#ff2e3f"/>
+      </svg>
+      <h2>Invalid Link</h2>
+      <p>This certificate link is invalid or has expired.<br>Ask your instructor for the correct QR code or link.</p>
+    </div>`;
+}
+
+/* ─── Render: search ─────────────────────────────────────── */
+function renderSearch(data) {
+  const { names, date } = data;
+  const root = document.getElementById('page');
+
+  root.innerHTML = `
+    <header class="site-header no-print">
+      <div class="logo-row">
+        <img src="https://podmedia.network/img/shared/logo.png" alt="podmedia" />
+        <span class="logo-sep"></span>
+        <img class="logo-partner" src="KAMELIZER FLOW LOGO (white 2.png" alt="Kamelizer Flow" />
+      </div>
+    </header>
+
+    <div class="hero no-print">
+      <div class="eyebrow"><span class="dot"></span>AI Video Production Workflow 101</div>
+      <h1>Get Your <span class="accent">Certificate</span></h1>
+      <p>Enter the name you registered with — we'll find your certificate instantly.</p>
+    </div>
+
+    <div class="search-wrap no-print">
+      <div class="search-box">
+        <input type="text" id="nameInput" placeholder="Your full name…"
+               autocomplete="off" autocapitalize="words" autocorrect="off" spellcheck="false" />
+        <button id="searchBtn">Find</button>
+      </div>
+      <div id="suggestions" class="suggestions"></div>
+      <div id="msgEl"></div>
+    </div>
+
+    <div id="certResult" class="cert-result" style="display:none">
+      <div class="found-pill no-print">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Certificate found!
+      </div>
+      <button class="btn-dl no-print" id="dlBtnTop">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Save as Image
+      </button>
+      <div class="cert-scale-outer">
+        <div class="cert-scale-inner" id="certOutput"></div>
+      </div>
+      <button class="btn-dl no-print" id="dlBtnBottom" style="margin-top:4px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Save as Image
+      </button>
+    </div>
+  `;
+
+  const input       = document.getElementById('nameInput');
+  const suggestEl   = document.getElementById('suggestions');
+  const msgEl       = document.getElementById('msgEl');
+  const certResult  = document.getElementById('certResult');
+  const certOutput  = document.getElementById('certOutput');
+
+  document.getElementById('dlBtnTop').onclick    = function() { downloadCertCanvas(this); };
+  document.getElementById('dlBtnBottom').onclick = function() { downloadCertCanvas(this); };
+
+  /* Suggestions list */
+  function showSuggestions(matches) {
+    suggestEl.innerHTML = '';
+    matches.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'sug-item';
+      div.innerHTML = `
+        <div class="sug-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        ${esc(name)}`;
+      div.addEventListener('click', () => {
+        input.value = name;
+        suggestEl.innerHTML = '';
+        showCert(name);
+      });
+      suggestEl.appendChild(div);
+    });
+  }
+
+  /* Show certificate */
+  function showCert(name) {
+    const matched = names.find(n => norm(n) === norm(name));
+    if (!matched) {
+      msgEl.innerHTML = `<div class="msg msg-err">No certificate found for that exact name. Try selecting a suggestion, or check your spelling.</div>`;
+      certResult.style.display = 'none';
+      return;
+    }
+    msgEl.innerHTML = '';
+    currentCertName = matched;
+    certOutput.innerHTML = certHTML(matched, date);
+    certResult.style.display = 'flex';
+    requestAnimationFrame(() => {
+      scaleCert();
+      certResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  /* Live search with debounce */
+  let debounce;
+  input.addEventListener('input', function () {
+    clearTimeout(debounce);
+    certResult.style.display = 'none';
+    msgEl.innerHTML = '';
+    const q = this.value;
+    if (!q.trim()) { suggestEl.innerHTML = ''; return; }
+    debounce = setTimeout(() => {
+      const matches = findMatches(q, names);
+      showSuggestions(matches);
+      if (matches.length === 1 && norm(matches[0]) === norm(q)) showCert(matches[0]);
+    }, 180);
+  });
+
+  /* Search button */
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const q = input.value.trim();
+    if (!q) return;
+    const matches = findMatches(q, names);
+    if (matches.length === 0) {
+      msgEl.innerHTML = `<div class="msg msg-err">No certificate found for "<strong>${esc(q)}</strong>". Check your spelling or ask your instructor.</div>`;
+      suggestEl.innerHTML = '';
+    } else if (matches.length === 1) {
+      suggestEl.innerHTML = '';
+      showCert(matches[0]);
+    } else {
+      showSuggestions(matches);
+    }
+  });
+
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('searchBtn').click(); });
+
+  window.addEventListener('resize', scaleCert);
+}
+
+/* ─── Init ───────────────────────────────────────────────── */
+const raw = new URLSearchParams(window.location.search).get('d');
+if (!raw) {
+  renderInvalid();
+} else {
+  const data = decodeData(raw);
+  if (!data || !Array.isArray(data.names) || !data.names.length) {
+    renderInvalid();
+  } else {
+    renderSearch(data);
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function fetchDataUri(url) {
+  try {
+    const abs = new URL(url, window.location.href).href;
+    const r = await fetch(abs, { mode: 'cors', cache: 'force-cache' });
+    if (!r.ok) return null;
+    const blob = await r.blob();
+    return await new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(fr.result);
+      fr.onerror = rej;
+      fr.readAsDataURL(blob);
+    });
+  } catch { return null; }
+}
+
+async function downloadCertCanvas(btn) {
+  const certPage = document.querySelector('.cert-page');
+  if (!certPage) return;
+
+  const origLabel = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Saving…';
+
+  try {
+    /* Wait for all fonts to finish loading */
+    await document.fonts.ready;
+
+    /* Remove scale transform — html2canvas misrenders text with a transformed parent */
+    const scaleInner = document.querySelector('.cert-scale-inner');
+    const origTransform = scaleInner ? scaleInner.style.transform : '';
+    if (scaleInner) scaleInner.style.transform = 'none';
+
+    /* Replace img srcs with data URIs so canvas isn't tainted */
+    const imgs = certPage.querySelectorAll('img');
+    const origSrcs = Array.from(imgs).map(img => img.getAttribute('src'));
+    for (const img of imgs) {
+      const uri = await fetchDataUri(img.src);
+      if (uri) img.setAttribute('src', uri);
+    }
+
+    /* Wait two frames for layout to settle */
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const canvas = await html2canvas(certPage, {
+      scale: 3,
+      backgroundColor: '#060608',
+      useCORS: false,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 15000
+    });
+
+    /* Restore */
+    imgs.forEach((img, i) => img.setAttribute('src', origSrcs[i]));
+    if (scaleInner) scaleInner.style.transform = origTransform;
+
+    const link = document.createElement('a');
+    link.download = (currentCertName || 'Certificate') + ' – Certificate.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+  } catch (e) {
+    console.warn('Canvas export failed:', e);
+    alert('Could not save image. Please take a screenshot instead.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = origLabel;
+  }
+}
+</script>
+</body>
+</html>

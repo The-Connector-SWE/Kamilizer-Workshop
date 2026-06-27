@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hands-On Labs · The AI Video Director's Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
+<style>
+  .lab-switch { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .lab-switch button { display: flex; flex-direction: column; gap: 3px; padding: 14px 22px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass); transition: .25s; text-align: left; }
+  .lab-switch b { font-size: 16px; font-weight: 700; }
+  .lab-switch span { font-size: 12px; color: var(--muted); }
+  .lab-switch button:hover { border-color: var(--line2); }
+  .lab-switch button.active { background: linear-gradient(120deg, rgba(124,77,255,.22), rgba(90,215,255,.12)); border-color: var(--line2); }
+
+  .lab-layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+  @media (max-width: 880px) { .lab-layout { grid-template-columns: 1fr; } }
+
+  .lab-panel { display: none; }
+  .lab-panel.active { display: block; animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+
+  .lab-goal { padding: 20px 22px; border-radius: 18px; margin-bottom: 22px; display: flex; gap: 14px; align-items: flex-start;
+    background: linear-gradient(100deg, rgba(124,77,255,.16), rgba(90,215,255,.08)); border: 1px solid var(--line2); }
+  .lab-goal .ico { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex: none; background: var(--glass2); border: 1px solid var(--line2); color: var(--cyan); }
+  .lab-goal h4 { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--cyan); }
+  .lab-goal p { margin-top: 6px; font-size: 14px; color: var(--muted2); line-height: 1.55; }
+
+  .steps { list-style: none; counter-reset: step; }
+  .step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 16px 18px; border-radius: 16px; margin-bottom: 10px; transition: .25s; cursor: pointer; align-items: start; }
+  .step:hover { background: var(--glass); }
+  .step.done { opacity: .62; }
+  .step-check { width: 30px; height: 30px; border-radius: 9px; border: 2px solid var(--line2); display: grid; place-items: center; margin-top: 2px; transition: .25s; color: transparent; }
+  .step.done .step-check { background: var(--iri); border-color: transparent; color: #150a2e; }
+  .step-num { position: absolute; left: 0; }
+  .step-body h3 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; transition: .25s; }
+  .step.done .step-body h3 { text-decoration: line-through; text-decoration-color: var(--muted); }
+  .step-body p { margin-top: 4px; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+  .step-idx { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+  /* progress aside */
+  .lab-aside { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 16px; }
+  .prog-card { padding: 22px; border-radius: 20px; text-align: center; }
+  .prog-ring { position: relative; width: 130px; height: 130px; margin: 4px auto 10px; }
+  .prog-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .prog-ring .bg { fill: none; stroke: rgba(255,255,255,.1); stroke-width: 9; }
+  .prog-ring .fg { fill: none; stroke: url(#labgrad); stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1); }
+  .prog-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .prog-num b { font-size: 34px; font-weight: 800; line-height: 1; }
+  .prog-num span { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .prog-card h4 { font-size: 15px; font-weight: 700; }
+  .prog-card .meta { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .prog-reset { margin-top: 16px; font-size: 12px; color: var(--muted); border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .prog-reset:hover { color: var(--bad); border-color: var(--bad); }
+  .prog-done-msg { margin-top: 14px; font-size: 13px; color: var(--good); font-weight: 600; opacity: 0; transition: .3s; }
+  .prog-done-msg.show { opacity: 1; }
+
+  .idea-card { padding: 20px; border-radius: 20px; }
+  .idea-card h4 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
+  .idea-card .ideas { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .idea-card .ideas li b { display: block; font-size: 14px; font-weight: 600; }
+  .idea-card .ideas li span { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+  .lab-footer-cta { margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px 24px; border-radius: 18px; }
+  .lab-footer-cta .lf-label { font-size: 14px; color: var(--muted2); }
+</style>
+</head>
+<body data-page="labs">
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="labgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8de0"/><stop offset=".5" stop-color="#9b8cff"/><stop offset="1" stop-color="#5ad7ff"/></linearGradient>
+</defs></svg>
+
+<main class="page">
+  <a class="back-link anim a1" href="index.html"><i>←</i> Back to Platforms</a>
+  <header class="page-head">
+    <div class="pill anim a1"><span class="dot"></span> Participant playbooks</div>
+    <h1 class="page-title anim a2">Hands-On <span class="iri">Labs</span></h1>
+    <p class="page-sub anim a3">Follow along step by step. Tick each task as you go — your progress is saved on this device, so you can close the page and pick up right where you left off.</p>
+  </header>
+
+  <div class="lab-switch anim a3" id="labSwitch"></div>
+  <div id="labRoot"></div>
+</main>
+
+<footer class="site-foot">
+  <span>The AI Video Director's Lab — workshop companion</span>
+  <span><a href="agenda.html">Agenda</a> · <a href="index.html">Platforms</a> · <a href="resources.html">Resources</a></span>
+</footer>
+
+<script src="labs-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var LABS = window.LABS, IDEAS = window.SPRINT_IDEAS;
+  var KEY = "aivid_labs_progress_v1";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  var active = LABS[0].id;
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function doneCount(lab) { var s = state[lab.id] || {}; return lab.steps.filter(function (_, i) { return s[i]; }).length; }
+
+  var check = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg>';
+  var target = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg>';
+
+  function renderSwitch() {
+    document.getElementById("labSwitch").innerHTML = LABS.map(function (lab) {
+      var dc = doneCount(lab), total = lab.steps.length;
+      return '<button data-lab="' + lab.id + '"' + (lab.id === active ? ' class="active"' : "") +
+        "><b>" + lab.title + "</b><span>" + lab.tag + " · " + dc + "/" + total + " done</span></button>";
+    }).join("");
+    document.querySelectorAll("#labSwitch button").forEach(function (b) {
+      b.onclick = function () { active = b.dataset.lab; renderAll(); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    });
+  }
+
+  function renderPanel() {
+    var lab = LABS.find(function (l) { return l.id === active; });
+    var s = state[lab.id] || {};
+    var dc = doneCount(lab), total = lab.steps.length;
+    var pct = Math.round((dc / total) * 100);
+    var C = 2 * Math.PI * 56;
+
+    var stepsHtml = lab.steps.map(function (st, i) {
+      var done = !!s[i];
+      return '<li class="step' + (done ? " done" : "") + '" data-i="' + i + '">' +
+        '<div class="step-check">' + check + "</div>" +
+        '<div class="step-body"><div class="step-idx">Step ' + (i + 1) + " / " + total + "</div>" +
+        "<h3>" + st.t + "</h3><p>" + st.d + "</p></div></li>";
+    }).join("");
+
+    var ideaHtml = lab.id === "sprint"
+      ? '<div class="idea-card glass"><h4>Pick your format</h4><ul class="ideas">' +
+        IDEAS.map(function (x) { return "<li><b>" + x.k + "</b><span>" + x.d + "</span></li>"; }).join("") +
+        "</ul></div>"
+      : '<div class="idea-card glass"><h4>Tip</h4><ul class="ideas"><li><span>Work in order — each step feeds the next. If a generation misses, tweak the prompt and re-run before moving on.</span></li></ul></div>';
+
+    document.getElementById("labRoot").innerHTML =
+      '<div class="lab-panel active"><div class="lab-layout"><div>' +
+        '<div class="lab-goal"><div class="ico">' + target + "</div><div><h4>Your goal</h4><p>" + lab.goal + "</p></div></div>" +
+        '<ul class="steps">' + stepsHtml + "</ul>" +
+        '<div class="lab-footer-cta glass"><span class="lf-label">' + lab.footer.label + '</span>' +
+        '<a class="btn-ghost" href="' + lab.footer.link + '">' + lab.footer.linkText + ' <i>→</i></a></div>' +
+      "</div>" +
+      '<aside class="lab-aside"><div class="prog-card glass"><div class="prog-ring">' +
+        '<svg viewBox="0 0 130 130"><circle class="bg" cx="65" cy="65" r="56"/>' +
+        '<circle class="fg" cx="65" cy="65" r="56" style="stroke-dasharray:' + C + ";stroke-dashoffset:" + (C * (1 - dc / total)) + '"/></svg>' +
+        '<div class="prog-num"><b>' + dc + '</b><span>of ' + total + "</span></div></div>" +
+        "<h4>" + lab.title + "</h4><div class=\"meta\">" + lab.duration + " · " + pct + "% complete</div>" +
+        '<div class="prog-done-msg' + (dc === total ? " show" : "") + '">✓ Lab complete — nice work.</div>' +
+        '<button class="prog-reset">Reset this lab</button></div>' +
+        ideaHtml +
+      "</aside></div></div>";
+
+    document.querySelectorAll(".step").forEach(function (el) {
+      el.onclick = function () {
+        var i = +el.dataset.i;
+        if (!state[lab.id]) state[lab.id] = {};
+        state[lab.id][i] = !state[lab.id][i];
+        save(); renderAll();
+      };
+    });
+    var reset = document.querySelector(".prog-reset");
+    if (reset) reset.onclick = function () { state[lab.id] = {}; save(); renderAll(); };
+  }
+
+  function renderAll() { renderSwitch(); renderPanel(); }
+  renderAll();
+})();
+</script>
+</body>
+</html>

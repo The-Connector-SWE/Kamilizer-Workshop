@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Video Workshop · Aesthetic Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@300;400;500;600;700;800&family=Archivo:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ============ DIRECTION A — CINEMATIC DIRECTOR ============ */
+  .dirA {
+    --bg: #0a0a0c; --panel: #141417; --ink: #f4efe7; --muted: #8a857c;
+    --ember: #ff7a1a; --ember2: #ffb066; --line: rgba(255,255,255,.08);
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(255,122,26,.10), transparent 60%),
+      radial-gradient(100% 60% at 0% 110%, rgba(255,122,26,.06), transparent 60%),
+      var(--bg);
+    color: var(--ink); font-family: 'Space Grotesk', sans-serif;
+    width: 100%; height: 100%; padding: 0; position: relative; overflow: hidden;
+  }
+  .dirA::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  }
+  .dirA .wrap { position: relative; z-index: 1; }
+  .dirA .hero { padding: 44px 40px 36px; border-bottom: 1px solid var(--line); position: relative; }
+  .dirA .slate { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--ember2); margin-bottom: 22px; }
+  .dirA .slate .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 12px var(--ember); }
+  .dirA h1 { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 64px; line-height: .92; letter-spacing: -.01em; text-transform: uppercase; }
+  .dirA h1 .gl { color: transparent; -webkit-text-stroke: 1.4px var(--ember); }
+  .dirA .sub { margin-top: 16px; max-width: 360px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .dirA .bar { margin-top: 26px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.07); overflow: hidden; }
+  .dirA .bar > i { display: block; height: 100%; width: 38%; background: linear-gradient(90deg, var(--ember), var(--ember2)); border-radius: 4px; }
+  .dirA .barrow { display: flex; justify-content: space-between; margin-top: 9px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+
+  .dirA .sect { padding: 30px 40px 8px; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+  .dirA .pcard { margin: 8px 40px 0; background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)); border: 1px solid var(--line); border-radius: 18px; padding: 24px; position: relative; overflow: hidden; }
+  .dirA .pcard::before { content:""; position:absolute; inset:0; background: radial-gradient(80% 120% at 100% 0%, rgba(255,122,26,.14), transparent 55%); pointer-events:none; }
+  .dirA .ph { display: flex; align-items: center; gap: 16px; }
+  .dirA .logo { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; background: #1c1c20; border: 1px solid var(--line); flex: none; }
+  .dirA .pname { font-size: 21px; font-weight: 700; letter-spacing: -.01em; }
+  .dirA .ptag { font-size: 12px; color: var(--ember2); letter-spacing: .04em; margin-top: 3px; }
+  .dirA .pabout { margin-top: 16px; color: #c9c4ba; font-size: 14px; line-height: 1.55; }
+  .dirA .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .dirA .chip { font-size: 11.5px; letter-spacing: .04em; padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(255,122,26,.32); color: var(--ember2); background: rgba(255,122,26,.07); }
+
+  .dirA .qcard { margin: 22px 40px 44px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .dirA .qlabel { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--ember); display:flex; justify-content:space-between; }
+  .dirA .qq { margin-top: 14px; font-size: 17px; font-weight: 600; line-height: 1.4; }
+  .dirA .opt { margin-top: 10px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); font-size: 14px; display: flex; align-items: center; gap: 12px; color: #d9d4ca; }
+  .dirA .opt .k { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; color: var(--muted); flex:none; }
+  .dirA .opt.correct { border-color: var(--ember); background: rgba(255,122,26,.1); color: #fff; }
+  .dirA .opt.correct .k { background: var(--ember); border-color: var(--ember); color: #0a0a0c; font-weight: 700; }
+
+  /* ============ DIRECTION B — MISSION CONTROL HUD ============ */
+  .dirB {
+    --bg: #05080a; --ink: #d8f5e6; --muted: #5d7d70; --grid: rgba(89,255,160,.06);
+    --neon: #59ffa0; --cyan: #46e0ff; --line: rgba(89,255,160,.16);
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/100% 34px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/34px 100%,
+      radial-gradient(100% 70% at 50% 0%, rgba(70,224,255,.06), transparent 60%),
+      var(--bg);
+    color: var(--ink); font-family: 'JetBrains Mono', monospace;
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+  }
+  .dirB::after { content:""; position:absolute; inset:0; pointer-events:none; background: repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,.18) 2px 3px); opacity:.4; }
+  .dirB .wrap { position: relative; z-index: 1; }
+  .dirB .corner { position:absolute; width:14px; height:14px; border-color: var(--neon); }
+  .dirB .hero { padding: 40px 36px 30px; border-bottom: 1px dashed var(--line); }
+  .dirB .meta { display:flex; justify-content:space-between; font-size: 10.5px; letter-spacing: .1em; color: var(--muted); margin-bottom: 24px; }
+  .dirB .meta .live { color: var(--neon); display:flex; align-items:center; gap:6px; }
+  .dirB .meta .live::before { content:""; width:7px; height:7px; border-radius:50%; background: var(--neon); box-shadow:0 0 10px var(--neon); }
+  .dirB h1 { font-family:'Archivo', sans-serif; font-weight:900; font-size: 50px; line-height:.95; letter-spacing:-.02em; color:#eafff3; text-transform:uppercase; }
+  .dirB h1 em { font-style: normal; color: var(--neon); text-shadow: 0 0 22px rgba(89,255,160,.5); }
+  .dirB .sub { margin-top: 14px; max-width: 380px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+  .dirB .readout { margin-top: 24px; display:grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border:1px solid var(--line); }
+  .dirB .ro { background: #070c0e; padding: 12px 13px; }
+  .dirB .ro .v { font-family:'Archivo'; font-weight:800; font-size: 22px; color: var(--cyan); }
+  .dirB .ro .l { font-size: 9.5px; letter-spacing:.12em; color: var(--muted); margin-top: 4px; text-transform:uppercase; }
+
+  .dirB .sect { padding: 26px 36px 6px; font-size: 10.5px; letter-spacing: .2em; color: var(--muted); }
+  .dirB .sect b { color: var(--neon); font-weight: 500; }
+  .dirB .pcard { margin: 6px 36px 0; background: #070d0f; border:1px solid var(--line); padding: 22px; position: relative; }
+  .dirB .pcard .corner { display:block; }
+  .dirB .c-tl { top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
+  .dirB .c-br { bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+  .dirB .ph { display:flex; align-items:center; gap:14px; }
+  .dirB .logo { width:54px; height:54px; display:grid; place-items:center; background:#0c1518; border:1px solid var(--line); flex:none; }
+  .dirB .pname { font-family:'Archivo'; font-weight:800; font-size:19px; color:#eafff3; letter-spacing:.01em; }
+  .dirB .ptag { font-size:11px; color: var(--cyan); margin-top:4px; letter-spacing:.05em; }
+  .dirB .pid { margin-left:auto; font-size:10px; color: var(--muted); }
+  .dirB .pabout { margin-top:15px; color:#9fc4b3; font-size:12.5px; line-height:1.65; }
+  .dirB .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:15px; }
+  .dirB .chip { font-size:10.5px; padding:5px 9px; border:1px solid var(--line); color: var(--neon); letter-spacing:.04em; }
+  .dirB .chip::before { content:"▸ "; color: var(--cyan); }
+
+  .dirB .qcard { margin: 20px 36px 42px; background:#070d0f; border:1px solid var(--line); padding: 22px; }
+  .dirB .qlabel { font-size:10.5px; letter-spacing:.18em; color: var(--neon); display:flex; justify-content:space-between; }
+  .dirB .qq { margin-top:13px; font-family:'Archivo'; font-weight:700; font-size:16px; color:#eafff3; line-height:1.4; letter-spacing:.005em; }
+  .dirB .opt { margin-top:9px; padding:13px 15px; border:1px solid var(--line); font-size:12.5px; display:flex; gap:11px; align-items:center; color:#9fc4b3; }
+  .dirB .opt .k { color: var(--muted); }
+  .dirB .opt.correct { border-color: var(--neon); background: rgba(89,255,160,.08); color:#eafff3; box-shadow: inset 0 0 0 1px rgba(89,255,160,.3); }
+  .dirB .opt.correct .k { color: var(--neon); }
+  .dirB .opt.correct::after { content:"✓ CORRECT"; margin-left:auto; font-size:10px; letter-spacing:.1em; color: var(--neon); }
+
+  /* ============ DIRECTION C — HOLOGRAPHIC AURORA ============ */
+  .dirC {
+    --bg: #0b0820; --ink: #f3f0ff; --muted: #a39dc9; --line: rgba(255,255,255,.1);
+    background:
+      radial-gradient(70% 50% at 12% 8%, rgba(124,77,255,.4), transparent 60%),
+      radial-gradient(60% 45% at 95% 18%, rgba(0,224,210,.28), transparent 60%),
+      radial-gradient(80% 50% at 60% 115%, rgba(255,77,170,.26), transparent 60%),
+      var(--bg);
+    color: var(--ink); font-family: 'Sora', sans-serif;
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+  }
+  .dirC .grain { position:absolute; inset:0; pointer-events:none; opacity:.4;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E"); }
+  .dirC .wrap { position:relative; z-index:1; }
+  .dirC .iri { background: linear-gradient(100deg,#ff8de0,#9b8cff 35%,#5ad7ff 70%,#7affd6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .dirC .hero { padding: 46px 40px 36px; }
+  .dirC .pill { display:inline-flex; align-items:center; gap:9px; padding:7px 15px; border-radius:999px; background: rgba(255,255,255,.08); border:1px solid var(--line); backdrop-filter: blur(8px); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#d8d2ff; margin-bottom:24px; }
+  .dirC .pill .dot { width:7px; height:7px; border-radius:50%; background: linear-gradient(90deg,#ff8de0,#5ad7ff); }
+  .dirC h1 { font-weight:800; font-size:58px; line-height:.98; letter-spacing:-.03em; }
+  .dirC .sub { margin-top:18px; max-width:370px; color:var(--muted); font-size:15px; line-height:1.55; }
+  .dirC .glassbar { margin-top:26px; padding:16px 18px; border-radius:16px; background: rgba(255,255,255,.06); border:1px solid var(--line); backdrop-filter: blur(12px); }
+  .dirC .glassbar .top { display:flex; justify-content:space-between; font-size:12px; color:#d8d2ff; margin-bottom:10px; }
+  .dirC .track { height:8px; border-radius:8px; background: rgba(255,255,255,.1); overflow:hidden; }
+  .dirC .track > i { display:block; height:100%; width:42%; border-radius:8px; background: linear-gradient(90deg,#ff8de0,#9b8cff,#5ad7ff); box-shadow:0 0 16px rgba(124,77,255,.6); }
+
+  .dirC .sect { padding: 30px 40px 8px; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color: var(--muted); }
+  .dirC .pcard { margin: 8px 40px 0; padding: 24px; border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04)); border:1px solid var(--line); backdrop-filter: blur(16px); box-shadow: 0 16px 50px rgba(40,10,80,.4); position:relative; overflow:hidden; }
+  .dirC .ph { display:flex; align-items:center; gap:16px; }
+  .dirC .logo { width:58px; height:58px; border-radius:18px; display:grid; place-items:center; background: linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.03)); border:1px solid var(--line); flex:none; box-shadow: inset 0 1px 0 rgba(255,255,255,.2); }
+  .dirC .pname { font-size:22px; font-weight:700; letter-spacing:-.01em; }
+  .dirC .ptag { font-size:12.5px; margin-top:3px; font-weight:500; }
+  .dirC .pabout { margin-top:16px; color:#cfc9ee; font-size:14px; line-height:1.6; }
+  .dirC .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:17px; }
+  .dirC .chip { font-size:11.5px; padding:6px 13px; border-radius:999px; background: rgba(255,255,255,.07); border:1px solid var(--line); color:#e3def9; }
+
+  .dirC .qcard { margin: 22px 40px 46px; padding:24px; border-radius:22px; background: linear-gradient(180deg, rgba(124,77,255,.16), rgba(255,255,255,.03)); border:1px solid var(--line); backdrop-filter: blur(16px); }
+  .dirC .qlabel { font-size:11px; letter-spacing:.2em; text-transform:uppercase; display:flex; justify-content:space-between; }
+  .dirC .qq { margin-top:14px; font-size:18px; font-weight:600; line-height:1.4; }
+  .dirC .opt { margin-top:11px; padding:14px 17px; border-radius:14px; background: rgba(255,255,255,.05); border:1px solid var(--line); font-size:14px; display:flex; align-items:center; gap:12px; color:#d8d2ff; }
+  .dirC .opt .k { width:24px; height:24px; border-radius:8px; display:grid; place-items:center; font-size:11px; background: rgba(255,255,255,.08); border:1px solid var(--line); flex:none; }
+  .dirC .opt.correct { border-color: transparent; background: linear-gradient(100deg, rgba(255,141,224,.22), rgba(90,215,255,.22)); box-shadow: 0 0 0 1px rgba(255,255,255,.3), 0 8px 30px rgba(124,77,255,.35); color:#fff; }
+  .dirC .opt.correct .k { background: linear-gradient(120deg,#ff8de0,#5ad7ff); color:#1a0f33; font-weight:700; border-color: transparent; }
+
+  /* generic logo glyph strokes */
+  .lg { width: 30px; height: 30px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+// Stylized placeholder logo glyph for Gemini (a faceted spark / diamond)
+function GemGlyph({ stroke, fill }) {
+  return (
+    <svg className="lg" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2 C16 9 23 16 30 16 C23 16 16 23 16 30 C16 23 9 16 2 16 C9 16 16 9 16 2 Z"
+        fill={fill||'none'} stroke={stroke} strokeWidth="1.6" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="dirs" title="AI Video Workshop — Aesthetic Directions" subtitle="Each frame = hero + a platform card + a quiz card. Pick one and I'll build the full interactive site.">
+
+        {/* ---------- DIRECTION A ---------- */}
+        <DCArtboard id="a" label="A · Cinematic Director" width={480} height={1180}>
+          <div className="dirA">
+            <div className="wrap">
+              <div className="hero">
+                <div className="slate"><span className="dot"></span> Day 01 · You are the director</div>
+                <h1>AI VIDEO<br/><span className="gl">WORKSHOP</span></h1>
+                <p className="sub">From storyboard to final cut. Meet your crew of AI platforms, one module at a time.</p>
+                <div className="bar"><i></i></div>
+                <div className="barrow"><span>Progress</span><span>3 / 8 modules</span></div>
+              </div>
+              <div className="sect">Module 1 · The Executive Producer</div>
+              <div className="pcard">
+                <div className="ph">
+                  <div className="logo"><GemGlyph stroke="#ff7a1a"/></div>
+                  <div><div className="pname">Gemini</div><div className="ptag">Pre-visualisation · Google</div></div>
+                </div>
+                <p className="pabout">Build a custom Gem that acts as your executive producer — generating storyboards, scripts, VO, and the image prompts that feed everything downstream.</p>
+                <div className="chips"><span className="chip">Storyboarding</span><span className="chip">Script + VO</span><span className="chip">Prompt engine</span></div>
+              </div>
+              <div className="qcard">
+                <div className="qlabel"><span>Quick Check</span><span>01 / 03</span></div>
+                <div className="qq">What role does the Gem play in the workflow?</div>
+                <div className="opt"><span className="k">A</span> Final video render</div>
+                <div className="opt correct"><span className="k">B</span> Executive producer — storyboard &amp; prompts</div>
+                <div className="opt"><span className="k">C</span> Upscaling stills</div>
+              </div>
+            </div>
+          </div>
+        </DCArtboard>
+
+        {/* ---------- DIRECTION B ---------- */}
+        <DCArtboard id="b" label="B · Mission Control HUD" width={480} height={1180}>
+          <div className="dirB">
+            <div className="wrap">
+              <div className="hero">
+                <div className="meta"><span>SYS // AIVID-WORKSHOP.v2</span><span className="live">LIVE SESSION</span></div>
+                <h1>AI VIDEO<br/><em>ORCHESTRATION</em></h1>
+                <p className="sub">Command the full generative stack. Each module unlocks a new platform in your production pipeline.</p>
+                <div className="readout">
+                  <div className="ro"><div className="v">12</div><div className="l">Platforms</div></div>
+                  <div className="ro"><div className="v">03</div><div className="l">Modules</div></div>
+                  <div className="ro"><div className="v">38%</div><div className="l">Complete</div></div>
+                </div>
+              </div>
+              <div className="sect">MODULE_01 // <b>STRATEGIC PRE-VIZ</b></div>
+              <div className="pcard">
+                <span className="corner c-tl"></span><span className="corner c-br"></span>
+                <div className="ph">
+                  <div className="logo"><GemGlyph stroke="#59ffa0"/></div>
+                  <div><div className="pname">GEMINI</div><div className="ptag">EXEC PRODUCER GEM</div></div>
+                  <div className="pid">ID·001</div>
+                </div>
+                <p className="pabout">Configure a Gem as your executive producer. Outputs storyboards, scripts, VO and the per-scene image prompts that drive the pipeline.</p>
+                <div className="chips"><span className="chip">storyboard</span><span className="chip">script_vo</span><span className="chip">prompt_gen</span></div>
+              </div>
+              <div className="qcard">
+                <div className="qlabel"><span>// QUICK_CHECK</span><span>01/03</span></div>
+                <div className="qq">What role does the Gem play in the workflow?</div>
+                <div className="opt"><span className="k">[A]</span> Final video render</div>
+                <div className="opt correct"><span className="k">[B]</span> Executive producer</div>
+                <div className="opt"><span className="k">[C]</span> Upscaling stills</div>
+              </div>
+            </div>
+          </div>
+        </DCArtboard>
+
+        {/* ---------- DIRECTION C ---------- */}
+        <DCArtboard id="c" label="C · Holographic Aurora" width={480} height={1180}>
+          <div className="dirC">
+            <div className="grain"></div>
+            <div className="wrap">
+              <div className="hero">
+                <div className="pill"><span className="dot"></span> A 2-day generative journey</div>
+                <h1>The AI Video<br/><span className="iri">Director's Lab</span></h1>
+                <p className="sub">Glide through every platform in the modern production stack — beautifully, one module at a time.</p>
+                <div className="glassbar">
+                  <div className="top"><span>Your progress</span><span>3 of 8 modules</span></div>
+                  <div className="track"><i></i></div>
+                </div>
+              </div>
+              <div className="sect">Module 1 · Pre-Visualisation</div>
+              <div className="pcard">
+                <div className="ph">
+                  <div className="logo"><GemGlyph stroke="url(#g)" fill="none"/>
+                    <svg width="0" height="0"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ff8de0"/><stop offset="1" stopColor="#5ad7ff"/></linearGradient></defs></svg>
+                  </div>
+                  <div><div className="pname">Gemini</div><div className="ptag iri">Your executive producer</div></div>
+                </div>
+                <p className="pabout">Build a custom Gem that storyboards your film, writes the script and VO, and generates the precise image prompts your visuals are built from.</p>
+                <div className="chips"><span className="chip">Storyboarding</span><span className="chip">Script + VO</span><span className="chip">Prompt engine</span></div>
+              </div>
+              <div className="qcard">
+                <div className="qlabel"><span className="iri">Quick Check</span><span>01 / 03</span></div>
+                <div className="qq">What role does the Gem play in the workflow?</div>
+                <div className="opt"><span className="k">A</span> Final video render</div>
+                <div className="opt correct"><span className="k">B</span> Executive producer — storyboard &amp; prompts</div>
+                <div className="opt"><span className="k">C</span> Upscaling stills</div>
+              </div>
+            </div>
+          </div>
+        </DCArtboard>
+
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

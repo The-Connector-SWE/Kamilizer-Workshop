@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PodMedia · The Director's Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
+<link rel="stylesheet" href="game.css" />
+<link rel="stylesheet" href="game-v2.css" />
+<style>
+  /* v2-only: hide the v1 hero inside MapView; the shell renders its own */
+  body.v2 .map-hero { display: none; }
+</style>
+</head>
+<body class="v2">
+<div id="root"></div>
+
+<script src="game-sfx.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="logos.jsx"></script>
+<script src="labs-data.js"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="ui.jsx"></script>
+<script type="text/babel" src="game-data.jsx"></script>
+<script type="text/babel" src="game-challenges.jsx"></script>
+<script type="text/babel" src="game-ui.jsx"></script>
+<script type="text/babel" src="game-ui-v2.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const { RANKS } = window.GAME;
+const { PLATFORMS } = window.WORKSHOP;
+const LABS = window.LABS;
+const GAME_KEY = "aivid_directors_game_v1"; // shared save with v1
+
+// Game-y copy: levels become missions
+const LEVELS = window.GAME.LEVELS.map((lv) => ({
+  ...lv,
+  code: lv.code.replace("Level", "Mission"),
+}));
+
+function loadGame() {
+  try { return JSON.parse(localStorage.getItem(GAME_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveGame(s) { try { localStorage.setItem(GAME_KEY, JSON.stringify(s)); } catch (e) {} }
+
+// soft UI blips on any button/link press
+document.addEventListener("click", (e) => {
+  if (e.target.closest("button, a") && window.SFX) window.SFX.click();
+});
+
+function GameAppV2() {
+  const [booted, setBooted] = useState(() => {
+    try { return sessionStorage.getItem("dg_booted") === "1"; } catch (e) { return false; }
+  });
+  const [muted, setMuted] = useState(window.SFX ? window.SFX.muted : false);
+  const [best, setBest] = useState(() => loadGame().best || {});
+  const [labChecks, setLabChecks] = useState(() => loadGame().labs || {});
+  const [view, setView] = useState({ type: "map" });
+
+  useEffect(() => { saveGame({ best, labs: labChecks }); }, [best, labChecks]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [view]);
+
+  const cleared = LEVELS.filter((lv) => best[lv.id]).map((lv) => lv.id);
+  const rank = RANKS[cleared.length];
+  const xp = Object.values(best).reduce((n, b) => n + b.score * 10, 0);
+  const xpMax = LEVELS.reduce((n, lv) => n + window.GAME.levelItemCount(lv) * 10, 0);
+
+  function goMap() { setView({ type: "map" }); }
+  function enter(id) { setView({ type: "level", id }); }
+  function enterLab(id) { setView({ type: "lab", id }); }
+  function toggleMute() {
+    const m = !muted;
+    setMuted(m);
+    if (window.SFX) window.SFX.setMuted(m);
+  }
+
+  function toggleLabStep(labId, stepIdx, total) {
+    setLabChecks((prev) => {
+      const cur = (prev[labId] || Array(total).fill(false)).slice();
+      cur[stepIdx] = !cur[stepIdx];
+      return { ...prev, [labId]: cur };
+    });
+  }
+
+  function finishChallenge(levelId, score, total) {
+    const wasCleared = !!best[levelId];
+    setBest((prev) => {
+      const ex = prev[levelId];
+      if (ex && ex.score >= score) return prev;
+      return { ...prev, [levelId]: { score, total } };
+    });
+    setView({ type: "result", id: levelId, result: { score, total }, rankedUp: !wasCleared });
+  }
+
+  function reset() {
+    if (confirm("Reset all progress, XP and rank?")) { setBest({}); setLabChecks({}); goMap(); }
+  }
+
+  const curLevel = view.type === "level" || view.type === "result" ? LEVELS.find((lv) => lv.id === view.id) : null;
+  const curLab = view.type === "lab" ? LABS.find((l) => l.id === view.id) : null;
+
+  if (!booted) {
+    return (
+      <>
+        <AuroraBg />
+        <BootScreen onStart={() => {
+          setBooted(true);
+          try { sessionStorage.setItem("dg_booted", "1"); } catch (e) {}
+        }} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <AuroraBg />
+      <FrameCorners />
+      <HUDBar levels={LEVELS} cleared={cleared}
+        currentId={view.type !== "map" && curLevel ? curLevel.id : null}
+        xp={xp} xpMax={xpMax} rank={rank} onHome={goMap}
+        muted={muted} onToggleMute={toggleMute} />
+
+      {view.type === "map" && (
+        <>
+          <div className="ms-head anim a1">
+            <div className="ms-eyebrow">// Select mission</div>
+            <h1 className="ms-title">Mission <span className="iri">Select</span></h1>
+            <p className="ms-sub">Five missions, two side ops. Clear each one to climb the ranks from production assistant to director.</p>
+          </div>
+          <MapView levels={LEVELS} platforms={PLATFORMS} labs={LABS} labChecks={labChecks}
+            best={best} rank={rank} onEnter={enter} onEnterLab={enterLab} onReset={reset} />
+        </>
+      )}
+      {view.type === "level" && curLevel && (
+        <LevelView key={curLevel.id} level={curLevel} platforms={PLATFORMS} best={best[curLevel.id]}
+          onFinish={(score, total) => finishChallenge(curLevel.id, score, total)}
+          onBack={goMap} />
+      )}
+      {view.type === "lab" && curLab && (
+        <LabView lab={curLab}
+          checks={labChecks[curLab.id] || Array(curLab.steps.length).fill(false)}
+          onToggle={(i) => toggleLabStep(curLab.id, i, curLab.steps.length)}
+          onBack={goMap} />
+      )}
+      {view.type === "result" && curLevel && (
+        <DebriefView level={curLevel} result={view.result} rankedUp={view.rankedUp}
+          hasNext={curLevel.id < LEVELS.length}
+          onReplay={() => enter(curLevel.id)}
+          onMap={goMap}
+          onNext={() => enter(curLevel.id + 1)} />
+      )}
+
+      <div className="statline">
+        <span>PodMedia Network · Director's Game</span>
+        <span>Rank: {rank}</span>
+        <span><a href="game-v1.html" style={{ borderBottom: "1px solid currentColor" }}>Classic UI</a></span>
+      </div>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<GameAppV2 />);
+setTimeout(() => document.body.classList.add("anim-fallback"), 1600);
+</script>
+</body>
+</html>

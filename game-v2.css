@@ -1,0 +1,181 @@
+/* game-v2.css — "AAA game menu" treatment, layered over theme.css + game.css.
+   Keeps the aurora palette; sharpens geometry, adds HUD, boot screen, achievements. */
+
+:root {
+  --hud-h: 64px;
+  --edge: rgba(255,46,63,.5);
+}
+
+body.v2 { font-family: 'Sora', sans-serif; }
+body.v2 .aurora { filter: saturate(1.1) brightness(.85); }
+
+/* faint tactical grid over the whole stage */
+body.v2::before { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 56px 56px; }
+/* vignette */
+body.v2::after { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(4,2,14,.7)); }
+
+/* corner brackets */
+.frame-corner { position: fixed; width: 26px; height: 26px; z-index: 50; pointer-events: none; opacity: .5; }
+.frame-corner i { position: absolute; inset: 0; border: 1.5px solid var(--edge); }
+.fc-tl { top: 10px; left: 10px; } .fc-tl i { border-right: 0; border-bottom: 0; }
+.fc-tr { top: 10px; right: 10px; } .fc-tr i { border-left: 0; border-bottom: 0; }
+.fc-bl { bottom: 10px; left: 10px; } .fc-bl i { border-right: 0; border-top: 0; }
+.fc-br { bottom: 10px; right: 10px; } .fc-br i { border-left: 0; border-top: 0; }
+
+/* mono-caps utility */
+.mc { font-family: 'Space Grotesk', sans-serif; letter-spacing: .22em; text-transform: uppercase; }
+
+/* ================= boot screen ================= */
+.boot { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  background: radial-gradient(120% 90% at 50% 30%, #1a0a0a, #06040f 75%); cursor: pointer;
+  animation: none; transition: opacity .6s ease, visibility .6s; }
+.boot.out { opacity: 0; visibility: hidden; }
+.boot::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+  background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px); background-size: 100% 3px; }
+.boot::after { content: ""; position: absolute; left: 0; right: 0; height: 120px; top: -120px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(255,46,63,.08), transparent);
+  animation: bootScan 4s linear infinite; }
+@keyframes bootScan { to { transform: translateY(calc(100vh + 240px)); } }
+.boot-presents { font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: var(--muted); }
+.boot-title { margin-top: 18px; text-align: center; font-weight: 800; letter-spacing: -.02em; line-height: .96;
+  font-size: clamp(44px, 9vw, 104px); }
+.boot-title .row2 { display: block; }
+.boot-rule { width: min(420px, 70vw); height: 1px; margin: 34px 0 0; background: linear-gradient(90deg, transparent, var(--edge), transparent); position: relative; }
+.boot-rule::after { content: ""; position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; transform: translateX(-50%) rotate(45deg); background: var(--violet); box-shadow: 0 0 12px var(--violet); }
+.press-start { margin-top: 36px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(15px, 2.4vw, 19px); font-weight: 600; letter-spacing: .4em; text-transform: uppercase; color: var(--ink);
+  animation: psBlink 1.4s steps(2, jump-none) infinite; }
+@keyframes psBlink { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .press-start { animation: none; } .boot::after { animation: none; } }
+.boot-meta { position: absolute; bottom: 26px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 30px;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(163,157,201,.6); }
+
+/* ================= HUD ================= */
+.hud { position: sticky; top: 0; z-index: 40; height: var(--hud-h); display: flex; align-items: center; gap: 20px;
+  padding: 0 clamp(14px,3vw,30px); backdrop-filter: blur(18px);
+  background: linear-gradient(180deg, rgba(8,5,24,.92), rgba(8,5,24,.55)); border-bottom: 1px solid var(--line); }
+.hud::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--edge), transparent); }
+.hud-brand { display: flex; align-items: center; gap: 11px; flex: none; }
+.hud-brand .brand-mark { width: 32px; height: 32px; border-radius: 8px; }
+.hud-brand b { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
+.hud-links { display: flex; gap: 2px; margin-left: 6px; overflow-x: auto; scrollbar-width: none; }
+.hud-links::-webkit-scrollbar { display: none; }
+.hud-link { white-space: nowrap; padding: 7px 12px; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1.5px solid transparent; transition: .2s; }
+.hud-link:hover { color: var(--ink); }
+.hud-link.active { color: var(--ink); border-color: var(--violet); }
+.hud-right { margin-left: auto; display: flex; align-items: center; gap: 18px; flex: none; }
+.hud-missions { display: flex; gap: 7px; }
+.hud-node { width: 12px; height: 12px; transform: rotate(45deg); border: 1.5px solid var(--line2); background: transparent; transition: .25s; }
+.hud-node.done { background: var(--good); border-color: var(--good); box-shadow: 0 0 8px rgba(110,255,176,.6); }
+.hud-node.cur { border-color: var(--violet); background: rgba(155,140,255,.35); box-shadow: 0 0 10px rgba(155,140,255,.7); }
+.hud-xp { display: flex; flex-direction: column; gap: 4px; width: 150px; }
+.hud-xp-row { display: flex; justify-content: space-between; font-family: 'Space Grotesk', sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.hud-xp-row b { color: var(--ink); }
+.hud-xp-track { height: 7px; background: rgba(255,255,255,.08); border: 1px solid var(--line); position: relative; overflow: hidden; }
+.hud-xp-track i { display: block; height: 100%; background: var(--iri); box-shadow: 0 0 10px rgba(124,77,255,.7); transition: width .6s cubic-bezier(.2,.7,.2,1);
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 8px, rgba(0,0,0,.55) 8px 10px); mask-image: repeating-linear-gradient(90deg, #000 0 8px, rgba(0,0,0,.55) 8px 10px); }
+.hud-rank { display: flex; align-items: center; gap: 10px; }
+.hud-insignia { width: 36px; height: 36px; flex: none; display: grid; place-items: center; position: relative; color: var(--gold); }
+.hud-insignia svg.hex { position: absolute; inset: 0; color: rgba(255,211,110,.8); }
+.hud-insignia b { font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: var(--gold); }
+.hud-rank-id { display: flex; flex-direction: column; line-height: 1.25; }
+.hud-rank-id b { font-size: 12.5px; font-weight: 700; }
+.hud-rank-id span { font-family: 'Space Grotesk', sans-serif; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.hud-mute { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); color: var(--muted); transition: .2s; }
+.hud-mute:hover { color: var(--ink); border-color: var(--line2); }
+@media (max-width: 1080px) { .hud-xp { width: 100px; } .hud-missions { display: none; } }
+@media (max-width: 860px) { .hud-rank-id { display: none; } .hud-brand b { display: none; } }
+@media (max-width: 620px) { .hud-xp { display: none; } }
+
+/* ================= geometry overrides: sharpen everything ================= */
+body.v2 .lcard, body.v2 .quiz-card, body.v2 .learn-card, body.v2 .pface, body.v2 .ch-intro,
+body.v2 .result-card, body.v2 .lab-goal, body.v2 .lstep, body.v2 .oc-slot, body.v2 .oc-card,
+body.v2 .qopt, body.v2 .final-banner { border-radius: 6px; }
+body.v2 .lnum, body.v2 .learn-n, body.v2 .qk, body.v2 .oc-n, body.v2 .lstep-check,
+body.v2 .plogo, body.v2 .mini-logo, body.v2 .brand-mark { border-radius: 4px; }
+body.v2 .btn-primary, body.v2 .btn-ghost, body.v2 .pflip-btn, body.v2 .mc-chip, body.v2 .stab {
+  border-radius: 3px; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+body.v2 .btn-primary { box-shadow: none; font-family: 'Space Grotesk', sans-serif; letter-spacing: .14em; text-transform: uppercase; font-size: 13.5px; }
+body.v2 .btn-ghost, body.v2 .stab { font-family: 'Space Grotesk', sans-serif; letter-spacing: .12em; text-transform: uppercase; font-size: 12.5px; }
+body.v2 .ltag, body.v2 .lbadge, body.v2 .pill, body.v2 .rank-chip { border-radius: 3px; }
+
+/* notched corner accent on main cards */
+body.v2 .lcard::after, body.v2 .quiz-card::after, body.v2 .ch-intro::after, body.v2 .result-card::after {
+  content: ""; position: absolute; top: 0; right: 0; width: 22px; height: 22px; pointer-events: none;
+  background: linear-gradient(135deg, transparent 49%, var(--edge) 50%, transparent 56%); opacity: .8; }
+body.v2 .quiz-card, body.v2 .ch-intro, body.v2 .result-card { position: relative; }
+
+/* kickers become mission codes */
+body.v2 .lcode, body.v2 .lv-kicker, body.v2 .quiz-kicker, body.v2 .map-hero .pill, body.v2 .oc-pool-label {
+  font-family: 'Space Grotesk', sans-serif; }
+
+/* mission select header */
+.ms-head { text-align: center; padding: clamp(20px,4vw,40px) 0 clamp(22px,3.5vw,34px); }
+.ms-eyebrow { font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: .42em; text-transform: uppercase; color: var(--cyan); }
+.ms-title { font-weight: 800; font-size: clamp(34px,6.5vw,62px); letter-spacing: -.02em; line-height: 1; margin-top: 14px; }
+.ms-sub { max-width: 560px; margin: 16px auto 0; color: var(--muted); font-size: clamp(14px,2vw,16px); line-height: 1.6; }
+
+/* mission number style */
+body.v2 .lnum { font-family: 'Space Grotesk', sans-serif; background: transparent; border: 1.5px solid var(--line2); position: relative; }
+body.v2 .lnum::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(255,255,255,.08); }
+body.v2 .lcard.next .lnum { border-color: var(--violet); box-shadow: 0 0 16px rgba(155,140,255,.35); }
+body.v2 .lcard.cleared .lnum { border-color: rgba(110,255,176,.5); }
+body.v2 .lcard:not(.locked):hover { transform: translateY(-3px) ; }
+body.v2 .lcard { backdrop-filter: blur(10px); }
+body.v2 .lconn { margin-left: 44px; }
+
+/* scan sweep on hover */
+body.v2 .lcard:not(.locked)::before { background: radial-gradient(70% 90% at 100% 0%, rgba(255,46,63,.1), transparent 55%); }
+
+/* stage tabs as segmented HUD control */
+body.v2 .stage-tabs { gap: 6px; }
+body.v2 .stab .sn { border-radius: 2px; }
+
+/* ================= debrief / achievements ================= */
+.clear-stamp { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(30px,5.5vw,48px); letter-spacing: .18em; text-transform: uppercase; line-height: 1.05; }
+.clear-stamp.good { background: var(--iri); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.clear-stamp.retry { color: var(--muted2); }
+.debrief-rows { max-width: 380px; margin: 26px auto 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+.dr { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 4px; border-bottom: 1px solid var(--line);
+  font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.dr b { font-size: 16px; color: var(--ink); letter-spacing: .04em; }
+.dr b.gold { color: var(--gold); }
+
+.achv { display: flex; align-items: center; gap: 14px; margin: 26px auto 0; padding: 14px 22px; max-width: 420px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,211,110,.5); background: linear-gradient(100deg, rgba(255,211,110,.12), rgba(255,141,224,.07));
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  animation: achvIn .6s cubic-bezier(.2,.8,.25,1.2) .45s backwards; }
+@keyframes achvIn { from { transform: translateY(-18px) scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+.achv::after { content: ""; position: absolute; top: 0; bottom: 0; width: 60px; transform: skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  animation: achvShine 1.6s ease .7s 2; left: -80px; }
+@keyframes achvShine { to { left: 120%; } }
+@media (prefers-reduced-motion: reduce) { .achv { animation: none; } .achv::after { animation: none; } }
+.achv-ico { width: 42px; height: 42px; flex: none; display: grid; place-items: center; color: var(--gold); position: relative; }
+.achv-body { text-align: left; }
+.achv-body span { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+.achv-body b { font-size: 16.5px; font-weight: 700; }
+
+/* footer status line */
+.statline { position: relative; z-index: 1; max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(16px,4vw,40px) 40px;
+  display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  font-family: 'Space Grotesk', sans-serif; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(163,157,201,.55); }
+
+/* ================= static companion pages (via site.js) ================= */
+body.v2 .glass, body.v2 .day-tab, body.v2 .tl-card, body.v2 .vid-card, body.v2 .inst-card { border-radius: 6px; }
+body.v2 .inst-avatar, body.v2 .tl-tag { border-radius: 4px; }
+body.v2 .page-kicker, body.v2 .pill { font-family: 'Space Grotesk', sans-serif; }
+body.v2 .page { position: relative; z-index: 1; }
+body.v2 .site-foot { font-family: 'Space Grotesk', sans-serif; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(163,157,201,.55); }
+
+/* ================= Level 1 script-intelligence sections — v2 geometry ================= */
+body.v2 .fw-node, body.v2 .fw-detail-main, body.v2 .fw-example, body.v2 .im-card,
+body.v2 .pitch-brief, body.v2 .pitch-board, body.v2 .csl-row, body.v2 .stage-clear { border-radius: 6px; }
+body.v2 .fw-n, body.v2 .im-n, body.v2 .csl-n { border-radius: 3px; }
+body.v2 .ch-stage, body.v2 .psl-badge { border-radius: 3px; }
+body.v2 .l1-sec-kicker, body.v2 .fw-q, body.v2 .fw-ex-label, body.v2 .im-row > span,
+body.v2 .pb-row span, body.v2 .pb-title, body.v2 .pbd-label, body.v2 .pitch-board-h { font-family: 'Space Grotesk', sans-serif; }

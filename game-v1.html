@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Director's Game · AI Video Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
+<link rel="stylesheet" href="game.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="logos.jsx"></script>
+<script src="labs-data.js"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="ui.jsx"></script>
+<script type="text/babel" src="game-data.jsx"></script>
+<script type="text/babel" src="game-challenges.jsx"></script>
+<script type="text/babel" src="game-ui.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const { LEVELS, RANKS } = window.GAME;
+const { PLATFORMS } = window.WORKSHOP;
+const LABS = window.LABS;
+const GAME_KEY = "aivid_directors_game_v1";
+
+function loadGame() {
+  try { return JSON.parse(localStorage.getItem(GAME_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveGame(s) { try { localStorage.setItem(GAME_KEY, JSON.stringify(s)); } catch (e) {} }
+
+function GameApp() {
+  const [best, setBest] = useState(() => loadGame().best || {});
+  const [labChecks, setLabChecks] = useState(() => loadGame().labs || {});
+  // view: {type:"map"} | {type:"level", id} | {type:"lab", id} | {type:"result", id, result, rankedUp}
+  const [view, setView] = useState({ type: "map" });
+
+  useEffect(() => { saveGame({ best, labs: labChecks }); }, [best, labChecks]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [view]);
+
+  const cleared = LEVELS.filter((lv) => best[lv.id]).map((lv) => lv.id);
+  const rank = RANKS[cleared.length];
+  const xp = Object.values(best).reduce((n, b) => n + b.score * 10, 0);
+  const xpMax = LEVELS.reduce((n, lv) => n + window.GAME.levelItemCount(lv) * 10, 0);
+
+  function goMap() { setView({ type: "map" }); }
+  function enter(id) { setView({ type: "level", id }); }
+  function enterLab(id) { setView({ type: "lab", id }); }
+
+  function toggleLabStep(labId, stepIdx, total) {
+    setLabChecks((prev) => {
+      const cur = (prev[labId] || Array(total).fill(false)).slice();
+      cur[stepIdx] = !cur[stepIdx];
+      return { ...prev, [labId]: cur };
+    });
+  }
+
+  function finishChallenge(levelId, score, total) {
+    const wasCleared = !!best[levelId];
+    setBest((prev) => {
+      const ex = prev[levelId];
+      if (ex && ex.score >= score) return prev;
+      return { ...prev, [levelId]: { score, total } };
+    });
+    setView({ type: "result", id: levelId, result: { score, total }, rankedUp: !wasCleared });
+  }
+
+  function reset() {
+    if (confirm("Reset all progress, XP and rank?")) { setBest({}); setLabChecks({}); goMap(); }
+  }
+
+  const curLevel = view.type === "level" || view.type === "result" ? LEVELS.find((lv) => lv.id === view.id) : null;
+  const curLab = view.type === "lab" ? LABS.find((l) => l.id === view.id) : null;
+
+  return (
+    <>
+      <AuroraBg />
+      <GameTopBar levels={LEVELS} cleared={cleared} xp={xp} xpMax={xpMax} rank={rank} onHome={goMap} />
+      {view.type === "map" && (
+        <MapView levels={LEVELS} platforms={PLATFORMS} labs={LABS} labChecks={labChecks}
+          best={best} rank={rank} onEnter={enter} onEnterLab={enterLab} onReset={reset} />
+      )}
+      {view.type === "lab" && curLab && (
+        <LabView lab={curLab}
+          checks={labChecks[curLab.id] || Array(curLab.steps.length).fill(false)}
+          onToggle={(i) => toggleLabStep(curLab.id, i, curLab.steps.length)}
+          onBack={goMap} />
+      )}
+      {view.type === "level" && curLevel && (
+        <LevelView key={curLevel.id} level={curLevel} platforms={PLATFORMS} best={best[curLevel.id]}
+          onFinish={(score, total) => finishChallenge(curLevel.id, score, total)}
+          onBack={goMap} />
+      )}
+      {view.type === "result" && curLevel && (
+        <ResultView level={curLevel} result={view.result} rankedUp={view.rankedUp}
+          hasNext={curLevel.id < LEVELS.length}
+          onReplay={() => enter(curLevel.id)}
+          onMap={goMap}
+          onNext={() => enter(curLevel.id + 1)} />
+      )}
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<GameApp />);
+setTimeout(() => document.body.classList.add("anim-fallback"), 1600);
+</script>
+</body>
+</html>

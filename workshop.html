@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mastering The AI Content Workflow 101 · POD AIStudio Talks</title>
+<meta name="description" content="A 2-day hands-on workshop by podmedia.network. Master the end-to-end generative AI content workflow — pre-visualization, advanced video orchestration, and full-stack production. You are the director, AI is your crew." />
+<meta property="og:title" content="The New Era of Media Production · POD AIStudio Talks" />
+<meta property="og:description" content="Mastering The AI Content Workflow 101 — a 2-day hands-on AI production workshop by podmedia.network." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#08080c; --bg2:#0d0c14; --panel:#101019; --panel2:#15131f;
+  --ink:#f6f4fb; --muted:#a39db8; --muted2:#cfc9e0;
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+  --red:#ff2e3f; --red2:#e0101f; --red-deep:#b00b18;
+  --glow:rgba(255,46,63,.55);
+  --maxw:1160px;
+  --grad:linear-gradient(100deg,#ff2e3f,#ff5a4d 55%,#ff8a3d);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Sora',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;line-height:1.55}
+::selection{background:rgba(255,46,63,.35)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;line-height:1.05}
+.red{color:var(--red)}
+.grad-txt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* backdrop */
+.bg-fx{position:fixed;inset:0;z-index:-1;overflow:hidden;background:
+  radial-gradient(120% 80% at 50% -10%,#1a0a12,transparent 55%),
+  radial-gradient(80% 60% at 85% 10%,rgba(255,46,63,.12),transparent 60%),var(--bg)}
+.bg-fx .grid{position:absolute;inset:0;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(120% 90% at 50% 0%,#000 30%,transparent 80%)}
+.bg-fx .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;mix-blend-mode:screen}
+.bg-fx .b1{width:46vw;height:46vw;left:-12vw;top:-16vw;background:radial-gradient(circle,#ff2e3f,transparent 70%);animation:f1 24s ease-in-out infinite}
+.bg-fx .b2{width:38vw;height:38vw;right:-10vw;top:8vw;background:radial-gradient(circle,#ff6a3d,transparent 70%);animation:f2 30s ease-in-out infinite}
+.bg-fx .b3{width:40vw;height:40vw;left:35vw;bottom:-22vw;background:radial-gradient(circle,#7a1020,transparent 70%);animation:f1 28s ease-in-out infinite reverse}
+@keyframes f1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4vw,3vw) scale(1.08)}}
+@keyframes f2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-3vw,4vw) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.bg-fx .blob{animation:none}}
+
+/* entrance */
+.rise{opacity:0;transform:translateY(18px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.21s}.d4{animation-delay:.29s}.d5{animation-delay:.37s}
+@media (prefers-reduced-motion:reduce){.rise{animation:none;opacity:1;transform:none}}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:12px clamp(16px,4vw,40px);
+  backdrop-filter:blur(18px);background:linear-gradient(180deg,rgba(8,8,12,.9),rgba(8,8,12,.5));border-bottom:1px solid var(--line)}
+.logo-pill{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.95);padding:7px 12px;border-radius:12px;flex:none;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+.logo-pill img{height:24px;width:auto;display:block}
+.nav-tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line2);padding-left:14px;margin-left:2px}
+.nav-links{display:flex;gap:4px;margin-left:auto}
+.nav-links a{padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);transition:.2s}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;font-weight:700;transition:transform .25s,box-shadow .25s,background .25s;white-space:nowrap}
+.btn-primary{padding:12px 24px;font-size:14.5px;color:#fff;background:var(--grad);box-shadow:0 10px 30px var(--glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 42px var(--glow)}
+.btn-ghost{padding:12px 22px;font-size:14.5px;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--line2)}
+.btn-ghost:hover{background:rgba(255,255,255,.13)}
+.nav .btn-primary{flex:none;padding:10px 20px}
+
+/* shell */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+section{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);
+  background:rgba(255,46,63,.1);border:1px solid rgba(255,46,63,.28);padding:7px 15px;border-radius:999px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--glow)}
+
+/* hero */
+.hero{padding:clamp(48px,9vw,96px) 0 40px;text-align:center}
+.hero h1{font-size:clamp(40px,8vw,82px);font-weight:700;margin:22px auto 0;max-width:14ch}
+.hero .course{margin-top:18px;font-size:clamp(16px,2.6vw,22px);color:var(--muted2);font-weight:500}
+.hero .course b{color:var(--ink);font-weight:700}
+.hero p.lede{margin:20px auto 0;max-width:62ch;color:var(--muted);font-size:clamp(15px,2.2vw,18px)}
+.hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.tagline{margin-top:34px;font-family:'Space Grotesk';font-size:clamp(15px,2.4vw,20px);color:var(--muted2)}
+.tagline b{color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:42px auto 0;max-width:840px}
+.stat{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:16px;padding:18px 14px;backdrop-filter:blur(10px)}
+.stat .n{font-family:'Space Grotesk';font-size:clamp(20px,3.4vw,28px);font-weight:700;color:var(--ink)}
+.stat .l{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* marquee */
+.marquee{margin-top:54px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
+.marquee .track{display:flex;gap:42px;width:max-content;animation:scroll 32s linear infinite;align-items:center}
+.marquee span{font-family:'Space Grotesk';font-size:15px;font-weight:500;color:var(--muted);white-space:nowrap;letter-spacing:.02em}
+.marquee span::before{content:"◆";color:var(--red);margin-right:42px;font-size:9px;vertical-align:middle}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee .track{animation:none}}
+
+/* generic section */
+.sec{padding:clamp(56px,9vw,96px) 0}
+.sec-head{max-width:680px;margin:0 auto clamp(34px,5vw,52px);text-align:center}
+.sec-head h2{font-size:clamp(28px,5vw,46px);font-weight:700;margin-top:16px}
+.sec-head p{margin-top:14px;color:var(--muted);font-size:clamp(15px,2.2vw,17px)}
+
+/* feature cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;padding:26px 24px;backdrop-filter:blur(12px);transition:.3s}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,46,63,.4);box-shadow:0 18px 50px rgba(255,46,63,.14)}
+.card .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:rgba(255,46,63,.13);border:1px solid rgba(255,46,63,.3);color:var(--red);margin-bottom:16px}
+.card h3{font-size:19px;font-weight:600}
+.card p{margin-top:9px;color:var(--muted);font-size:14.5px}
+
+/* agenda */
+.days{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:880px){.days{grid-template-columns:1fr}}
+.day{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);border-radius:22px;padding:28px 24px;backdrop-filter:blur(12px)}
+.day-tag{display:inline-block;font-family:'Space Grotesk';font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);background:rgba(255,46,63,.1);border:1px solid rgba(255,46,63,.28);padding:5px 13px;border-radius:999px}
+.day h3{font-size:22px;font-weight:600;margin:14px 0 20px}
+.tl{list-style:none;display:flex;flex-direction:column;gap:2px}
+.tl li{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+.tl li:first-child{border-top:none}
+.tl .t{font-family:'Space Grotesk';font-size:13px;font-weight:600;color:var(--red);padding-top:1px}
+.tl .b{font-weight:600;font-size:15px}
+.tl .b small{display:block;font-weight:400;color:var(--muted);font-size:13.5px;margin-top:3px}
+.tl li.brk .b{color:var(--muted);font-weight:500;font-style:italic}
+
+/* trainers */
+.trainers{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.trainers{grid-template-columns:1fr}}
+.trainer{display:flex;gap:18px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);border-radius:20px;padding:24px;backdrop-filter:blur(12px)}
+.tr-av{width:64px;height:64px;border-radius:16px;flex:none;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:22px;color:#fff;background:var(--grad);box-shadow:0 8px 24px var(--glow)}
+.trainer h3{font-size:18px;font-weight:600}
+.trainer .role{font-size:13px;color:var(--red);font-weight:600;margin:3px 0 9px;letter-spacing:.02em}
+.trainer p{font-size:14px;color:var(--muted)}
+
+/* split info */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.split{grid-template-columns:1fr}}
+.info{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);border-radius:20px;padding:28px 26px}
+.info h3{font-size:19px;font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.info ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.info li{position:relative;padding-left:26px;color:var(--muted2);font-size:14.5px}
+.info li::before{content:"";position:absolute;left:0;top:7px;width:10px;height:10px;border-radius:3px;background:var(--grad)}
+.warn{margin-top:16px;font-size:13.5px;color:var(--red);background:rgba(255,46,63,.08);border:1px solid rgba(255,46,63,.25);border-radius:12px;padding:12px 14px}
+
+/* form */
+.register{padding:clamp(56px,9vw,100px) 0}
+.form-shell{max-width:760px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--line2);border-radius:26px;padding:clamp(28px,5vw,48px);backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(0,0,0,.45)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+label{font-size:13px;font-weight:600;color:var(--muted2)}
+label .req{color:var(--red)}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:12px;padding:13px 15px;transition:.2s;width:100%}
+input::placeholder,textarea::placeholder{color:#6f6a83}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(255,46,63,.18);background:rgba(255,255,255,.06)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23a39db8' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+textarea{resize:vertical;min-height:96px}
+.form-submit{margin-top:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.form-submit .btn-primary{padding:14px 30px;font-size:15px}
+.form-note{font-size:13px;color:var(--muted)}
+.form-msg{margin-top:18px;border-radius:14px;padding:16px 18px;font-size:14.5px;display:none}
+.form-msg.ok{display:block;background:rgba(46,255,140,.08);border:1px solid rgba(46,255,140,.3);color:#7affb0}
+.form-msg.err{display:block;background:rgba(255,46,63,.08);border:1px solid rgba(255,46,63,.3);color:#ff8a96}
+
+/* footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:40px;padding:40px clamp(16px,4vw,40px) 50px}
+.foot-in{max-width:var(--maxw);margin:0 auto;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand .logo-pill{padding:6px 11px}
+.foot-brand .logo-pill img{height:22px}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.foot-links a:hover{color:var(--ink)}
+.foot-copy{width:100%;text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;border-top:1px solid var(--line);padding-top:22px}
+.foot-copy a{color:var(--muted2);border-bottom:1px solid transparent}
+.foot-copy a:hover{border-color:var(--red)}
+</style>
+</head>
+<body>
+<div class="bg-fx"><div class="grid"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="logo-pill" href="https://podmedia.network/en" target="_blank" rel="noopener" aria-label="podmedia.network">
+    <img src="https://podmedia.network/img/shared/logo.png" alt="podmedia network" />
+  </a>
+  <span class="nav-tag">POD AIStudio Talks</span>
+  <div class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#agenda">Agenda</a>
+    <a href="#trainers">Trainers</a>
+    <a href="#details">Details</a>
+  </div>
+  <a href="#register" class="btn btn-primary">Reserve a seat</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero wrap">
+  <div class="rise d1"><span class="eyebrow"><span class="dot"></span>An Official Workshop of podmedia.network</span></div>
+  <h1 class="rise d2">The New Era of <span class="grad-txt">Media Production</span></h1>
+  <div class="course rise d3"><b>Mastering The AI Content Workflow 101</b> &nbsp;·&nbsp; A hands-on 2-day intensive</div>
+  <p class="lede rise d3">Plan, generate, and orchestrate cinematic content end-to-end with the latest generative AI tools — from strategic pre-visualization to full-stack production. Built for media professionals ready to fold AI into a real production pipeline.</p>
+  <div class="cta rise d4">
+    <a href="#register" class="btn btn-primary">Reserve your seat →</a>
+    <a href="#agenda" class="btn btn-ghost">View the agenda</a>
+  </div>
+  <div class="tagline rise d4">"You are the director. <b>AI is your crew.</b>"</div>
+
+  <div class="stats rise d5">
+    <div class="stat"><div class="n">2 Days</div><div class="l">Intensive</div></div>
+    <div class="stat"><div class="n">11:00–16:30</div><div class="l">Daily</div></div>
+    <div class="stat"><div class="n">11 Hours</div><div class="l">Active time</div></div>
+    <div class="stat"><div class="n">EN / AR</div><div class="l">Bilingual</div></div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="track" id="track">
+    <span>Veo 3.1</span><span>Runway Gen-3</span><span>Kling 3.0</span><span>Seedance 2.0</span><span>Adobe Firefly</span><span>Nano Banana 2</span><span>GPT Image 2</span><span>Marey</span><span>Artlist Studio</span><span>Magnifica</span><span>Arcana</span><span>Custom Gems</span>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section class="sec wrap" id="overview">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="dot"></span>What you'll master</span>
+    <h2>From a blank prompt to a finished cinematic cut</h2>
+    <p>Four connected capabilities that turn scattered AI tools into one repeatable, brand-safe production workflow.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></div>
+      <h3>Strategic Pre-Visualization</h3>
+      <p>Plan AI video, write winning prompts, and lock characters for consistency across scenes using AI storyboarding tools.</p>
+    </div>
+    <div class="card">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+      <h3>Advanced Video Orchestration</h3>
+      <p>Image-to-video multimodal prompting and live model deep-dives across Veo, Runway, Kling, Seedance and Firefly.</p>
+    </div>
+    <div class="card">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+      <h3>Full-Stack Production</h3>
+      <p>Walk the complete pipeline with Artlist, Magnifica and Arcana — workflows, AI credits, and pricing demystified.</p>
+    </div>
+    <div class="card">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2Z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></div>
+      <h3>Hands-On Labs & Final Sprint</h3>
+      <p>Build your own custom Gem, animate your images, and ship a real commercial or short with 1-on-1 facilitator support.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section class="sec wrap" id="agenda">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="dot"></span>The 2-day schedule</span>
+    <h2>A guided path from concept to showcase</h2>
+    <p>Daily 11:00 AM – 04:30 PM · 11 active hours including breaks.</p>
+  </div>
+  <div class="days">
+    <div class="day">
+      <span class="day-tag">Day 01 · Pre-Visualization & Orchestration</span>
+      <h3>Plan it, prompt it, animate it</h3>
+      <ul class="tl">
+        <li><span class="t">11:00</span><span class="b">Welcome & Orientation<small>"Real or AI" game, intros, and the director's mindset.</small></span></li>
+        <li><span class="t">11:30</span><span class="b">Module 1 — Strategic Pre-Visualisation<small>Winning prompts, character locking, and building an executive-producer Gem.</small></span></li>
+        <li><span class="t">12:30</span><span class="b">Module 2 — Video Orchestration (Pt 1)<small>Image-to-video prompting and live model demos.</small></span></li>
+        <li class="brk"><span class="t">13:00</span><span class="b">Prayer break</span></li>
+        <li><span class="t">14:00</span><span class="b">Module 2 — Video Orchestration (Pt 2)<small>Workflow deep dives and testing model limits.</small></span></li>
+        <li><span class="t">15:00</span><span class="b">Hands-On Lab 1<small>Build your workflow and produce your first AI video clip.</small></span></li>
+        <li><span class="t">16:00</span><span class="b">Questions & Takeaways<small>Prep a 5–10 shot idea for Day 2.</small></span></li>
+      </ul>
+    </div>
+    <div class="day">
+      <span class="day-tag">Day 02 · Full-Stack & Final Sprint</span>
+      <h3>Build the full pipeline, ship the project</h3>
+      <ul class="tl">
+        <li><span class="t">11:00</span><span class="b">Recap & Plan<small>Insights from Day 1 and the core production pipeline.</small></span></li>
+        <li><span class="t">11:30</span><span class="b">Module 3 — Full-Stack Walkthrough<small>Artlist, Magnifica and Arcana — workflows, credits & pricing.</small></span></li>
+        <li><span class="t">12:30</span><span class="b">Final Project Sprint<small>Storyboard Gem, full-stack workflow, 1-on-1 facilitator support.</small></span></li>
+        <li class="brk"><span class="t">14:30</span><span class="b">Prayer break</span></li>
+        <li><span class="t">15:00</span><span class="b">Showcase & Wrap-Up<small>Group screening, reflection, final Q&A and next-step resources.</small></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section class="sec wrap" id="trainers">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="dot"></span>Meet your trainers</span>
+    <h2>Learn from working AI producers</h2>
+  </div>
+  <div class="trainers">
+    <div class="trainer">
+      <div class="tr-av">RM</div>
+      <div>
+        <h3>Rana Mahmoud</h3>
+        <div class="role">Art Director & Visual AI Artist</div>
+        <p>Over a decade crafting high-impact visual identities and brand narratives. She blends strong creative direction with cutting-edge AI workflows, turning abstract concepts into cinematic, scalable content that bridges traditional design and AI-powered production.</p>
+      </div>
+    </div>
+    <div class="trainer">
+      <div class="tr-av">AG</div>
+      <div>
+        <h3>Abdullah Ghanem</h3>
+        <div class="role">Podcast Producer & Systems Builder</div>
+        <p>Leads production and client operations across the region. Spanning hands-on editing, producer-level direction and SaaS product thinking, he builds highlight-extraction tools, automated client workflows, and AI-generated video — turning regional assets into cinematic, multi-platform media.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="sec wrap" id="details">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="dot"></span>Before you come</span>
+    <h2>Who it's for & what to bring</h2>
+  </div>
+  <div class="split">
+    <div class="info">
+      <h3><span class="red">●</span> Who should attend</h3>
+      <ul>
+        <li>Media professionals integrating AI into production pipelines</li>
+        <li>Production strategists and creative directors</li>
+        <li>Content creators mastering generative AI workflows</li>
+        <li>Studios scaling output without scaling logistics</li>
+      </ul>
+      <div class="warn">Instructional language: English / Arabic — contextualized for technical frameworks, UI toolsets, and modular structures.</div>
+    </div>
+    <div class="info">
+      <h3><span class="red">●</span> What to bring</h3>
+      <ul>
+        <li><b>Your own laptop</b> — mandatory for the hands-on labs & final sprint</li>
+        <li>Reliable high-speed internet for concurrent cloud rendering</li>
+        <li>An idea you'd like to produce (story, commercial, or short)</li>
+        <li>Curiosity — no prior AI experience required</li>
+      </ul>
+      <div class="warn">⚠ Every participant must bring a laptop to engage in the Hands-On Lab and Final Project Sprint.</div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section class="register wrap" id="register">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="dot"></span>Reserve your seat</span>
+    <h2>Connect with us to join the cohort</h2>
+    <p>Drop your details and we'll reach out with dates, pricing and how to secure your spot.</p>
+  </div>
+  <div class="form-shell">
+    <form id="signupForm" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Full name <span class="req">*</span></label>
+          <input id="name" name="name" type="text" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email <span class="req">*</span></label>
+          <input id="email" name="email" type="email" placeholder="you@email.com" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone / WhatsApp</label>
+          <input id="phone" name="phone" type="tel" placeholder="+966 …" />
+        </div>
+        <div class="field">
+          <label for="role">You are a…</label>
+          <select id="role" name="role">
+            <option value="">Select one</option>
+            <option>Media professional</option>
+            <option>Production strategist</option>
+            <option>Creative director</option>
+            <option>Content creator</option>
+            <option>Studio / agency</option>
+            <option>Student / other</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="company">Company / brand</label>
+          <input id="company" name="company" type="text" placeholder="Where you work (optional)" />
+        </div>
+        <div class="field full">
+          <label for="message">Anything you'd like us to know?</label>
+          <textarea id="message" name="message" placeholder="What you're hoping to get out of the workshop…"></textarea>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Send my request →</button>
+        <span class="form-note">We'll reply within 24 hours · No spam, ever.</span>
+      </div>
+      <div class="form-msg" id="formMsg"></div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <a class="logo-pill" href="https://podmedia.network/en" target="_blank" rel="noopener"><img src="https://podmedia.network/img/shared/logo.png" alt="podmedia network" /></a>
+      <span class="nav-tag" style="border:none;padding:0;margin:0">POD AIStudio Talks</span>
+    </div>
+    <div class="foot-links">
+      <a href="https://podmedia.network/en/aistudio" target="_blank" rel="noopener">AI Studio</a>
+      <a href="https://podmedia.network/en/about" target="_blank" rel="noopener">About</a>
+      <a href="https://podmedia.network/en/contact-us" target="_blank" rel="noopener">Contact</a>
+      <a href="#register">Reserve a seat</a>
+    </div>
+  </div>
+  <div class="foot-copy">
+    The New Era of Media Production · Mastering The AI Content Workflow 101 — An official workshop of
+    <a href="https://podmedia.network/en" target="_blank" rel="noopener">podmedia.network</a>. © 2026 PodMedia Network.
+  </div>
+</footer>
+
+<script>
+// ---- Signup form handling ----
+// To email submissions automatically, create a free form at https://formspree.io
+// (set the recipient to a.ghanem@the-connector.co) and paste the endpoint below.
+// Until then, the form falls back to opening a pre-filled email to you.
+const FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/xxxxxxx"
+const NOTIFY_EMAIL = "a.ghanem@the-connector.co";
+
+// duplicate marquee content for a seamless loop
+(function(){ const t=document.getElementById('track'); if(t) t.innerHTML+=t.innerHTML; })();
+
+const form = document.getElementById('signupForm');
+const msg = document.getElementById('formMsg');
+const btn = document.getElementById('submitBtn');
+
+function show(type, text){ msg.className = 'form-msg ' + type; msg.textContent = text; }
+
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(form).entries());
+  if(!data.name || !data.email){ show('err','Please add your name and email so we can reach you.'); return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)){ show('err','That email doesn\'t look right — mind double-checking?'); return; }
+
+  btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Sending…';
+
+  // 1) If a Formspree endpoint is configured, POST to it.
+  if(FORM_ENDPOINT){
+    try{
+      const res = await fetch(FORM_ENDPOINT, {
+        method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({...data, _subject:'New workshop signup — AI Content Workflow 101'})
+      });
+      if(res.ok){ form.reset(); show('ok','✓ Thank you, '+data.name.split(' ')[0]+'! Your request is in — we\'ll be in touch within 24 hours.'); btn.disabled=false; btn.textContent=orig; return; }
+      throw new Error('bad status');
+    }catch(err){ /* fall through to mailto */ }
+  }
+
+  // 2) Fallback: open a pre-filled email to the organiser.
+  const subject = encodeURIComponent('Workshop signup — AI Content Workflow 101');
+  const body = encodeURIComponent(
+    'New signup for Mastering The AI Content Workflow 101:\n\n'+
+    'Name: '+data.name+'\nEmail: '+data.email+'\nPhone: '+(data.phone||'-')+
+    '\nRole: '+(data.role||'-')+'\nCompany: '+(data.company||'-')+
+    '\n\nMessage:\n'+(data.message||'-')
+  );
+  window.location.href = 'mailto:'+NOTIFY_EMAIL+'?subject='+subject+'&body='+body;
+  show('ok','✓ Thanks, '+data.name.split(' ')[0]+'! Your email app is opening with your details — just hit send and we\'ll take it from there.');
+  btn.disabled=false; btn.textContent=orig;
+});
+</script>
+</body>
+</html>
