@@ -59,6 +59,7 @@ body.v2::after { content: ""; position: fixed; inset: 0; z-index: 0; pointer-eve
 .hud::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--edge), transparent); }
 .hud-brand { display: flex; align-items: center; gap: 11px; flex: none; }
+.hud-brand img { height: 28px; width: auto; display: block; }
 .hud-brand .brand-mark { width: 32px; height: 32px; border-radius: 8px; }
 .hud-brand b { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
 .hud-links { display: flex; gap: 2px; margin-left: 6px; overflow-x: auto; scrollbar-width: none; }
