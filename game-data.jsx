@@ -406,20 +406,32 @@ const LEVELS = [
     tag: "Platform Walkthrough",
     rank: "The Director",
     mission:
-      "Meet the three finishing tools that take your project from rendered clips to a polished, delivered production — music, upscaling, and voice.",
+      "Three platforms that transform raw AI output into polished, delivered productions — master the all-in-one video suite, the enterprise design canvas, and the king of voice synthesis.",
     tools: ["artlist", "magnifica", "elevenlabs"],
     learning: [
       {
-        t: "Artlist — Music & SFX Licensing",
-        d: "A royalty-free library built for content creators. License high-quality music tracks and sound effects that clear across all platforms — no copyright strikes, no per-use fees.",
+        t: "Artlist — The AI Video Platform",
+        d: "Originally a premium music library, Artlist has grown into a full AI video production suite. Artlist Studio lets you cast consistent AI characters, lock in locations, and layer video projects — while aggregating top-tier generators like Google Veo, OpenAI Sora, and Kling instead of locking you into one model. The Stock Legacy adds 30,000+ music tracks, 70,000+ SFX, 8K footage, custom LUTs, and native plugins for Premiere Pro, Final Cut, and DaVinci Resolve.",
       },
       {
-        t: "Magnifica — AI Upscaling",
-        d: "Upscale and enhance AI-generated footage and stills to full delivery resolution. Recovers fine detail, sharpens faces, and makes AI output hold up on large screens.",
+        t: "Artlist — Production Workflows",
+        d: "Use Artboards to let AI pull matching stock clips, AI video generations, music, and SFX into a unified mood board, then edit them into a final cut — ideal for commercial ads and short films. The Studio feature lets you generate a character once and place them into multiple AI-generated scenes without losing facial identity.",
       },
       {
-        t: "ElevenLabs — AI Voice & Audio",
-        d: "Generate natural-sounding voiceovers in any language and tone. Clone a voice, pick from a library of professional voices, or build a branded audio identity for your project.",
+        t: "Magnific — Enterprise Design & Workflow Canvas",
+        d: "Far beyond an image upscaler, Magnific is now a comprehensive collaborative design platform. Upscale images up to 10K or 16× with hallucinated photographic detail. Its node-based infinite canvas lets teams map entire asset pipelines, connect AI agents, and wire different models together — with direct access to 250 million licensed assets and deep MCP integration for tools like Claude and ChatGPT.",
+      },
+      {
+        t: "Magnific — Workflow Automation",
+        d: "Polish any blurry mid-journey render or compressed stock photo into crisp, print-ready 4K or 8K. Set up a Space where you feed your brand book into an AI agent — the agent then automatically generates on-brand social banners, product mockups, and variations across 30+ built-in tools, running effectively as an automated content agency engine.",
+      },
+      {
+        t: "ElevenLabs — Voice & Audio Synthesis",
+        d: "The undisputed leader in voice AI, ElevenLabs' v3 Alpha delivers hyper-realistic, emotionally aware voiceovers that grasp context, pacing, and subtext. Its Dubbing tool translates video into 30+ languages while preserving the original speaker's voice and emotional inflection. Eleven Music & SFX generates full tracks with customizable stems, and dedicated lip-sync integrations keep audio perfectly matched to talking-head video.",
+      },
+      {
+        t: "ElevenLabs — Global & Creative Use Cases",
+        d: "Take any English YouTube video, podcast, or training module, run it through the Dubbing tool, and instantly export it in Spanish, Japanese, or German in your exact voice. Use Voice Design to engineer custom accents, ages, and tones for fictional characters, then narrate long-form scripts for audiobooks or branded series — without hiring voice actors.",
       },
     ],
   },
