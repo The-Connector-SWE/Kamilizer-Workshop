@@ -56,7 +56,7 @@ function HUDBar({ levels, cleared, currentId, xp, xpMax, rank, onHome, muted, on
   return (
     <header className="hud">
       <button className="hud-brand" onClick={onHome}>
-        <span style={{ fontFamily:"'Space Grotesk',sans-serif", fontSize:"13px", fontWeight:700, color:"#fff", letterSpacing:".01em", whiteSpace:"nowrap" }}>pod <span style={{ color:"#e30016" }}>ai</span> studio</span>
+        <img src="KAMELIZER FLOW LOGO (white 2.png" alt="pod ai studio" />
       </button>
       <div className="hud-right">
         <div className="hud-missions" aria-label="Mission progress">
